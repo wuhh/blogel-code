@@ -8,12 +8,12 @@ using namespace std;
 
 //input line format: id x y \t nb1 nb2 ...
 
-class ssspSTRRnd1:public STRWorker
+class STRRnd1:public STRWorker
 {
     char buf[1000];
 public:
 
-    ssspSTRRnd1(int xnum, int ynum, double sampleRate):STRWorker(xnum, ynum, sampleRate)
+    STRRnd1(int xnum, int ynum, double sampleRate):STRWorker(xnum, ynum, sampleRate)
     {}
 
     //C version
@@ -69,17 +69,17 @@ public:
     }
 };
 
-void run_strpart1()
+void blogel_app_STRRnd1(string in_path, string out_path)
 {
     int xnum=4;
     int ynum=4;
     double sampleRate=0.05;
     //////
     WorkerParams param;
-    param.input_path="/OL-coord";
-    param.output_path="/OL_STR_parted";
+    param.input_path=in_path;
+    param.output_path=out_path;
     param.force_write=true;
     param.native_dispatcher=false;
-    ssspSTRRnd1 worker(xnum, ynum, sampleRate);
+    STRRnd1 worker(xnum, ynum, sampleRate);
     worker.run(param);
 }

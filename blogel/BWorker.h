@@ -388,7 +388,7 @@ public:
         int pos;
         for(pos=0; pos<vertexes.size(); pos++)
         {
-            int bid=vertexes[pos].bid;
+            int bid=vertexes[pos]->bid;
             if(bid!=prev)
             {
                 if(block!=NULL)

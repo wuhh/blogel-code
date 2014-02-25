@@ -3,10 +3,10 @@
 #include "blogel/Voronoi.h"
 #include <iostream>
 #include <sstream>
-#include "BGlobal.h"
+#include "blogel/BGlobal.h"
 using namespace std;
 
-class ssspPart:public BPartWorker
+class vorPart:public BPartWorker
 {
     char buf[1000];
 public:
@@ -122,11 +122,11 @@ public:
     //========================== for version with coordinates
 };
 
-int run_ssspPart()
+int blogel_app_vorPart(string in_path, string out_path)
 {
     WorkerParams param;
-    param.input_path="/OL-coord";
-    param.output_path="/OL_parted";
+    param.input_path=in_path;
+    param.output_path=out_path;
     param.force_write=true;
     param.native_dispatcher=false;
     bool to_undirected=false;
@@ -138,6 +138,6 @@ int run_ssspPart()
     set_maxRate(0.2);
     set_factor(2);
     //////
-    ssspPart worker;
+    vorPart worker;
     worker.run(param, to_undirected);
 }

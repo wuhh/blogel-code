@@ -127,12 +127,12 @@ struct blk_less
 class BPartWorker
 {
     typedef vector<BPartVertex*> VertexContainer;
-    typedef typename VertexContainer::iterator VertexIter;
+    typedef VertexContainer::iterator VertexIter;
     typedef BPartVertex::HashType HashT;
     typedef hash_map<VertexID, VertexID> HashMap;
     typedef HashMap::iterator MapIter;
     typedef MessageBuffer<BPartVertex> MessageBufT;
-    typedef typename MessageBufT::MessageContainerT MessageContainerT;
+    typedef MessageBufT::MessageContainerT MessageContainerT;
 
 public:
     HashT hash;

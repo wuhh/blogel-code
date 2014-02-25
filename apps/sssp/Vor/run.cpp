@@ -1,11 +1,9 @@
-#include "ssspSTRRnd1.h"
-#include "ssspSTRRnd2.h"
+#include "blogel_app_vorPart.h"
 
 int main(int argc, char* argv[])
 {
     init_workers();
-    run_strpart1();
-    run_strpart2();
+    blogel_app_vorPart("","");
     worker_finalize();
     return 0;
 }

@@ -4,7 +4,7 @@
 #include "blogel/BGlobal.h"
 using namespace std;
 
-class ssspSTRRnd2: public STR2Worker
+class STRRnd2: public STR2Worker
 {
     char buf[1000];
 public:
@@ -67,12 +67,12 @@ public:
     }
 };
 
-int run_strpart2()
+int blogel_app_STRRnd2(string in_path, string out_path)
 {
     WorkerParams param;
     param.input_path="/OL_STR_parted";
     param.output_path="/OL_STR_rnd2";
     param.force_write=true;
-    ssspSTRRnd2 worker;
+    STRRnd2 worker;
     worker.run(param);
 }
