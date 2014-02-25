@@ -120,16 +120,16 @@ public:
     virtual void toline(STRVertex* v, BufferedWriter & writer)=0;//this is what user specifies!!!!!!
     void dump_partition(const char* outpath)
     {//only writes to one file "part_machineID"
-    	hdfsFS fs = getHdfsFS();
-    	        BufferedWriter* writer=new BufferedWriter(outpath, fs);
+        hdfsFS fs = getHdfsFS();
+        BufferedWriter* writer=new BufferedWriter(outpath, fs);
 
-    	        for(VertexIter it=vertexes.begin(); it!=vertexes.end(); it++)
-    	        {
-    	            writer->check();
-    	            toline(*it, *writer);
-    	        }
-    	        delete writer;
-    	        hdfsDisconnect(fs);
+        for(int i = 0; i < _my_part.size() ; i++)
+        {
+            writer->check();
+            toline(_my_part[i], *writer);
+        }
+        delete writer;
+        hdfsDisconnect(fs);
     }
 
     //=======================================================

@@ -87,12 +87,12 @@ class ssspPart:public BPartWorker
 			return v;
 		}
 
-		virtual char* toline(BPartVertex* v)//key: "vertexID blockID slaveID"
+		virtual void toline(BPartVertex* v, BufferedWriter& writer)//key: "vertexID blockID slaveID"
 		{//val: list of "vid block slave "
 			sprintf(buf, "%d %d %d\t", v->id, v->value().color, _my_rank);
-			int len=strlen(buf);
-			char tmp[50];//just for length calculation
-			vector<triplet> & vec=v->value().nbsInfo;
+			writer.write(buf);
+            
+            vector<triplet> & vec=v->value().nbsInfo;
 			hash_map<int, triplet> map;
 			for(int i=0; i<vec.size(); i++){
 				map[vec[i].vid]=vec[i];
@@ -104,9 +104,8 @@ class ssspPart:public BPartWorker
 			ss>>token;//x
 			ss>>token;//y
 			int num=v->value().neighbors.size();
-			sprintf(tmp, "%d ", num);
-			strcat(buf+len, tmp);
-			len+=strlen(tmp);
+			sprintf(buf, "%d ", num);
+            writer.write(buf);
 			for(int i=0; i<num; i++)
 			{
 				ss>>token;
@@ -114,12 +113,11 @@ class ssspPart:public BPartWorker
 				ss>>token;
 				double elen=atof(token.c_str());
 				triplet trip=map[vid];
-				sprintf(tmp, "%d %f %d %d ", vid, elen, trip.bid, trip.wid);
-				strcat(buf+len, tmp);
-				len+=strlen(tmp);
-			}
-			return buf;
-		}
+				sprintf(buf, "%d %f %d %d ", vid, elen, trip.bid, trip.wid);
+			    writer.write(buf);
+            }
+		    writer.write("\n");
+        }
 		//========================== for version with coordinates
 };
 

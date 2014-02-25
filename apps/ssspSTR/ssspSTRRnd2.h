@@ -1,7 +1,7 @@
 #include "blogel/STRPartR2.h"
 #include <iostream>
 #include <sstream>
-#include "BGlobal.h"
+#include "blogel/BGlobal.h"
 using namespace std;
 
 class ssspSTRRnd2: public STR2Worker
@@ -36,43 +36,41 @@ class ssspSTRRnd2: public STR2Worker
 			return v;
 		}
 
-		virtual char* toline(STR2Block* b, STR2Vertex* v)
+		virtual void toline(STR2Block* b, STR2Vertex* v, BufferedWriter & writer)
 		{
-			sprintf(buf, "%d %d %d\t", v->id, v->value().new_bid, _my_rank);
-			int len=strlen(buf);
-			char tmp[50];//just for length calculation
-			vector<triplet> & vec=v->value().neighbors;
-			hash_map<int, triplet> map;
-			for(int i=0; i<vec.size(); i++){
-				map[vec[i].vid]=vec[i];
-			}
-			////////
-			stringstream ss(v->value().content);
-			string token;
-			ss>>token;//vid
-			ss>>token;//myBlock
-			ss>>token;//myWorker
-			while(ss>>token)
-			{
-				int vid=atoi(token.c_str());
-				ss>>token;
-				double elen=atof(token.c_str());
-				ss>>token;//filter out old blockID
-				ss>>token;//filter out workerID
-				triplet trip=map[vid];
-				sprintf(tmp, "%d %f %d %d ", vid, elen, trip.bid, trip.wid);
-				strcat(buf+len, tmp);
-				len+=strlen(tmp);
-			}
-			return buf;
-		}
+            sprintf(buf, "%d %d %d\t", v->id, v->value().new_bid, _my_rank);
+            writer.write(buf);
+            vector<triplet> & vec=v->value().neighbors;
+            hash_map<int, triplet> map;
+            for(int i=0; i<vec.size(); i++){
+                map[vec[i].vid]=vec[i];
+            }
+            ////////
+            stringstream ss(v->value().content);
+            string token;
+            ss>>token;//vid
+            ss>>token;//myBlock
+            ss>>token;//myWorker
+            while(ss>>token)
+            {
+                int vid=atoi(token.c_str());
+                ss>>token;
+                double elen=atof(token.c_str());
+                ss>>token;//filter out old blockID
+                ss>>token;//filter out workerID
+                triplet trip=map[vid];
+                sprintf(buf, "%d %f %d %d ", vid, elen, trip.bid, trip.wid);
+                writer.write(buf);
+            }
+            writer.write("\n");
+        }
 };
 
 int run_strpart2(){
-	WorkerParams param;
-	param.input_path="/OL_STR_parted";
-	param.output_path="/OL_STR_rnd2";
-	param.force_write=true;
-	ssspSTRRnd2 worker;
-	worker.run(param);
+    WorkerParams param;
+    param.input_path="/OL_STR_parted";
+    param.output_path="/OL_STR_rnd2";
+    param.force_write=true;
+    ssspSTRRnd2 worker;
+    worker.run(param);
 }

@@ -3,7 +3,7 @@
 #include "blogel/STRPart.h"
 #include <iostream>
 #include <sstream>
-#include "BGlobal.h"
+#include "blogel/BGlobal.h"
 using namespace std;
 
 //input line format: id x y \t nb1 nb2 ...
@@ -37,47 +37,47 @@ class ssspSTRRnd1:public STRWorker
 			return v;
 		}
 
-		virtual char* toline(STRVertex* v)//key: "vertexID blockID workerD"
+		virtual void toline(STRVertex* v,BufferedWriter & writer)//key: "vertexID blockID workerD"
 		{//val: list of "vid bid wid"
-			sprintf(buf, "%d %d %d\t", v->id, v->bid, _my_rank);
-			int len=strlen(buf);
-			char tmp[50];//just for length calculation
-			vector<triplet> & vec=v->nbsInfo;
-			hash_map<int, triplet> map;
-			for(int i=0; i<vec.size(); i++){
-				map[vec[i].vid]=vec[i];
-			}
-			////////
-			stringstream ss(v->content);
-			string token;
-			ss>>token;//vid
-			ss>>token;//x
-			ss>>token;//y
-			while(ss>>token)
-			{
-				int vid=atoi(token.c_str());
-				ss>>token;
-				double elen=atof(token.c_str());
-				triplet trip=map[vid];
-				sprintf(tmp, "%d %f %d %d ", vid, elen, trip.bid, trip.wid);
-				strcat(buf+len, tmp);
-				len+=strlen(tmp);
-			}
-			return buf;
-		}
+            sprintf(buf, "%d %d %d\t", v->id, v->bid, _my_rank);
+            writer.write(buf);
+
+            int len=strlen(buf);
+            vector<triplet> & vec=v->nbsInfo;
+            hash_map<int, triplet> map;
+            for(int i=0; i<vec.size(); i++){
+                map[vec[i].vid]=vec[i];
+            }
+            ////////
+            stringstream ss(v->content);
+            string token;
+            ss>>token;//vid
+            ss>>token;//x
+            ss>>token;//y
+            while(ss>>token)
+            {
+                int vid=atoi(token.c_str());
+                ss>>token;
+                double elen=atof(token.c_str());
+                triplet trip=map[vid];
+                sprintf(buf, "%d %f %d %d ", vid, elen, trip.bid, trip.wid);
+                writer.write(buf);
+            }
+            writer.write("\n");
+        }
 };
 
 void run_strpart1()
 {
-	int xnum=4;
-	int ynum=4;
-	double sampleRate=0.05;
-	//////
-	WorkerParams param;
-	param.input_path="/OL-coord";
-	param.output_path="/OL_STR_parted";
-	param.force_write=true;
-	param.native_dispatcher=false;
-	ssspSTRRnd1 worker(xnum, ynum, sampleRate);
-	worker.run(param);
+    int xnum=4;
+    int ynum=4;
+    double sampleRate=0.05;
+    //////
+    WorkerParams param;
+    param.input_path="/OL-coord";
+    param.output_path="/OL_STR_parted";
+    param.force_write=true;
+    param.native_dispatcher=false;
+    ssspSTRRnd1 worker(xnum, ynum, sampleRate);
+    worker.run(param);
 }
