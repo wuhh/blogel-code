@@ -3,7 +3,7 @@
 #include "blogel/Voronoi.h"
 #include <iostream>
 #include <sstream>
-#include "utils/global.h"
+#include "BGlobal.h"
 using namespace std;
 
 class ssspPart:public BPartWorker

@@ -1,11 +1,12 @@
 #ifndef BVERTEX_H
 #define BVERTEX_H
 
-#include "utils/global.h"
+
 #include <vector>
 #include "utils/serialization.h"
 #include "VMessageBuffer.h"
 #include "BAggregator.h"
+#include "BGlobal.h"
 using namespace std;
 
 template<class KeyT, class ValueT, class MessageT>

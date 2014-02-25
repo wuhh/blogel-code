@@ -1,7 +1,7 @@
 #include "blogel/STRPartR2.h"
 #include <iostream>
 #include <sstream>
-#include "utils/global.h"
+#include "BGlobal.h"
 using namespace std;
 
 class ssspSTRRnd2: public STR2Worker

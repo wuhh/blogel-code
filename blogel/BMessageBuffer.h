@@ -2,10 +2,11 @@
 #define BMESSAGEBUFFER_H
 
 #include <vector>
-#include "utils/global.h"
+
 #include "utils/Combiner.h"
 #include "utils/communication.h"
 #include "BVecs.h"
+#include "BGlobal.h"
 using namespace std;
 
 template<class BlockT>

@@ -3,7 +3,7 @@
 #include "blogel/STRPart.h"
 #include <iostream>
 #include <sstream>
-#include "utils/global.h"
+#include "BGlobal.h"
 using namespace std;
 
 //input line format: id x y \t nb1 nb2 ...
