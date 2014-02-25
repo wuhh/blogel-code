@@ -4,10 +4,11 @@
 #include "utils/serialization.h"
 #include "utils/communication.h"
 #include "utils/ydhdfs.h"
-#include "utils/type.h"
 #include "basic/Worker.h"
 #include "basic/Vertex.h"
-#include "blogel/BGlobal.h"
+
+#include "BGlobal.h"
+#include "BType.h"
 #include <vector>
 #include <iostream>
 #include <stdlib.h>

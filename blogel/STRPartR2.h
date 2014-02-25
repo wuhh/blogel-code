@@ -4,11 +4,12 @@
 #include "BVertex.h"
 #include "Block.h"
 #include "VMessageBuffer.h"
+#include "BType.h"
 //-----------------
 #include "utils/serialization.h"
 #include "utils/communication.h"
 #include "utils/ydhdfs.h"
-#include "utils/type.h"
+
 #include "basic/Worker.h"
 #include "BGlobal.h"
 #include <vector>
