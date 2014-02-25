@@ -145,7 +145,7 @@ public:
 
         for(BlockIter it=blocks.begin(); it!=blocks.end(); it++)
         {
-        	STR2Block * block=*it;
+            STR2Block * block=*it;
             for(int i=block->begin; i<block->begin+ block->size; i++)
             {
                 writer->check();
@@ -164,7 +164,7 @@ public:
 
         for(BlockIter it=blocks.begin(); it!=blocks.end(); it++)
         {
-        	STR2Block * block=*it;
+            STR2Block * block=*it;
             for(int i=block->begin; i<block->begin + block->size; i++)
             {
                 writer->check();
