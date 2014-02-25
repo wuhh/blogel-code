@@ -1,7 +1,7 @@
 #ifndef BGLOBAL_H
 #define BGLOBAL_H
 
-#include "global.h"
+#include "utils/global.h"
 
 using namespace std;
 

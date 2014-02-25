@@ -7,7 +7,7 @@
 #include "utils/type.h"
 #include "basic/Worker.h"
 #include "basic/Vertex.h"
-#include "BGlobal.h"
+#include "blogel/BGlobal.h"
 #include <vector>
 #include <iostream>
 #include <stdlib.h>
