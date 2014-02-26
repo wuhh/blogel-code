@@ -112,7 +112,7 @@ public:
     }
 };
 
-struct blk_less
+struct blk_less_vor
 {
     bool operator()(BPartVertex* const & a, BPartVertex* const & b) const
     {
@@ -609,7 +609,7 @@ public:
             vertexes.insert(vertexes.end(), _loaded_parts[i].begin(), _loaded_parts[i].end());
         }
         //===== deprecated ======
-        sort(vertexes.begin(), vertexes.end(), blk_less()); //groupby block_id
+        sort(vertexes.begin(), vertexes.end(), blk_less_vor()); //groupby block_id
         _loaded_parts.clear();
         //StopTimer(4);//DEBUG !!!!!!!!!!
         //PrintTimer("Reduce Time",4);//DEBUG !!!!!!!!!!

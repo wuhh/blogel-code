@@ -49,7 +49,7 @@ public:
 }
 ;
 
-struct blk_less
+struct blk_less_bassign
 {
     bool operator()(BAssignVertex* const & a, BAssignVertex* const & b) const
     {
@@ -64,12 +64,12 @@ struct blk_less
 class BAssignWorker
 {
     typedef vector<BAssignVertex*> VertexContainer;
-    typedef typename VertexContainer::iterator VertexIter;
+    typedef VertexContainer::iterator VertexIter;
     typedef BAssignVertex::HashType HashT;
     typedef hash_map<VertexID, VertexID> HashMap;
     typedef HashMap::iterator MapIter;
     typedef MessageBuffer<BAssignVertex> MessageBufT;
-    typedef typename MessageBufT::MessageContainerT MessageContainerT;
+    typedef MessageBufT::MessageContainerT MessageContainerT;
 
 public:
     HashT hash;
@@ -329,7 +329,7 @@ public:
             vertexes.insert(vertexes.end(), _loaded_parts[i].begin(), _loaded_parts[i].end());
         }
         //===== deprecated ======
-        sort(vertexes.begin(), vertexes.end(), blk_less()); //groupby block_id
+        sort(vertexes.begin(), vertexes.end(), blk_less_bassign()); //groupby block_id
         //StopTimer(4);//DEBUG !!!!!!!!!!
         //PrintTimer("Reduce Time",4);//DEBUG !!!!!!!!!!
     }
