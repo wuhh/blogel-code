@@ -16,9 +16,8 @@ using namespace std;
 //ASSUMPTIONS:
 //* each worker reads "part_workerID" from HDFS
 //* vertices in "part_workerID" are already grouped by blockID
-template<class BlockT, class AggregatorT=BDummyAgg>//user-defined VertexT
-class BWorker
-{
+template <class BlockT, class AggregatorT = BDummyAgg> //user-defined VertexT
+class BWorker {
 public:
     typedef typename BlockT::VertexType VertexT;
     //---------------------------------
@@ -42,24 +41,31 @@ public:
 
     VertexContainer vertexes;
     int active_vcount;
-    VMessageBufT * vmessage_buffer;
+    VMessageBufT* vmessage_buffer;
     //---------------------
     BlockContainer blocks;
     int active_bcount;
-    BMessageBufT * bmessage_buffer;
+    BMessageBufT* bmessage_buffer;
     //---------------------
-    enum DUMPMODE{B_DUMP=0, V_DUMP=1};
+    enum DUMPMODE {
+        B_DUMP = 0,
+        V_DUMP = 1
+    };
     int dump_mode;
     void set_dump_mode(int mode)
     {
-        dump_mode=mode;
+        dump_mode = mode;
     }
 
-    enum COMPUTEMODE{B_COMP=0, V_COMP=1, VB_COMP=2};
+    enum COMPUTEMODE {
+        B_COMP = 0,
+        V_COMP = 1,
+        VB_COMP = 2
+    };
     int compute_mode;
     void set_compute_mode(int mode)
     {
-        compute_mode=mode;
+        compute_mode = mode;
     }
     //---------------------
     Combiner<MessageT>* combiner;
@@ -71,38 +77,38 @@ public:
     BWorker()
     {
         //init_workers();//put to run.cpp
-        vmessage_buffer=new VMessageBufT;
-        global_message_buffer=vmessage_buffer;
-        active_vcount=0;
-        bmessage_buffer=new BMessageBufT;
-        global_bmessage_buffer=bmessage_buffer;
-        active_bcount=0;
+        vmessage_buffer = new VMessageBufT;
+        global_message_buffer = vmessage_buffer;
+        active_vcount = 0;
+        bmessage_buffer = new BMessageBufT;
+        global_bmessage_buffer = bmessage_buffer;
+        active_bcount = 0;
         ///////////////
-        dump_mode=B_DUMP;
-        compute_mode=B_COMP;
+        dump_mode = B_DUMP;
+        compute_mode = B_COMP;
         ///////////////
-        combiner=NULL;
-        global_combiner=NULL;
-        bcombiner=NULL;
-        global_bcombiner=NULL;
+        combiner = NULL;
+        global_combiner = NULL;
+        bcombiner = NULL;
+        global_bcombiner = NULL;
         ///////////////
-        aggregator=NULL;
-        global_aggregator=NULL;
-        global_agg=NULL;
+        aggregator = NULL;
+        global_aggregator = NULL;
+        global_agg = NULL;
     }
 
     virtual ~BWorker()
     {
-        for(VertexIter it=vertexes.begin(); it!=vertexes.end(); it++)
+        for (VertexIter it = vertexes.begin(); it != vertexes.end(); it++)
             delete *it;
-        for(BlockIter it=blocks.begin(); it!=blocks.end(); it++)
+        for (BlockIter it = blocks.begin(); it != blocks.end(); it++)
             delete *it;
         delete vmessage_buffer;
         delete bmessage_buffer;
-        if(getAgg()!=NULL)
+        if (getAgg() != NULL)
             delete (FinalT*)global_agg;
         //worker_finalize();//put to run.cpp
-        worker_barrier();//newly added for ease of multi-job programming in run.cpp
+        worker_barrier(); //newly added for ease of multi-job programming in run.cpp
     }
 
     int getVNum()
@@ -117,56 +123,50 @@ public:
 
     void setCombiner(Combiner<MessageT>* cb)
     {
-        combiner=cb;
-        global_combiner=cb;
+        combiner = cb;
+        global_combiner = cb;
     }
 
     void setBCombiner(Combiner<BMsgT>* cb)
     {
-        bcombiner=cb;
-        global_bcombiner=cb;
+        bcombiner = cb;
+        global_bcombiner = cb;
     }
 
     void setAggregator(AggregatorT* ag)
     {
-        aggregator=ag;
-        global_aggregator=ag;
-        global_agg=new FinalT;
+        aggregator = ag;
+        global_aggregator = ag;
+        global_agg = new FinalT;
     }
 
     void active_vcompute()
     {
-        active_vcount=0;
-        VMessageBufT* mbuf=(VMessageBufT*)get_message_buffer();
-        vector<MessageContainerT> & v_msgbufs=mbuf->get_v_msg_bufs();
-        for(BlockIter it=blocks.begin(); it!=blocks.end(); it++)
-        {
-            BlockT* block=*it;
-            for(int i=block->begin; i<block->size; i++)
-            {
-                if(v_msgbufs[i].size()==0)
-                {
-                    if(vertexes[i]->is_active())
-                    {
-                        block->activate();//vertex activates its block
+        active_vcount = 0;
+        VMessageBufT* mbuf = (VMessageBufT*)get_message_buffer();
+        vector<MessageContainerT>& v_msgbufs = mbuf->get_v_msg_bufs();
+        for (BlockIter it = blocks.begin(); it != blocks.end(); it++) {
+            BlockT* block = *it;
+            for (int i = block->begin; i < block->size; i++) {
+                if (v_msgbufs[i].size() == 0) {
+                    if (vertexes[i]->is_active()) {
+                        block->activate(); //vertex activates its block
                         vertexes[i]->compute(v_msgbufs[i]);
-                        AggregatorT* agg=(AggregatorT*)get_aggregator();
-                        if(agg!=NULL)
+                        AggregatorT* agg = (AggregatorT*)get_aggregator();
+                        if (agg != NULL)
                             agg->stepPartialV(vertexes[i]);
-                        if(vertexes[i]->is_active())
+                        if (vertexes[i]->is_active())
                             active_vcount++;
                     }
-                }
-                else
-                {
-                    block->activate();//vertex activates its block
+                } else {
+                    block->activate(); //vertex activates its block
                     vertexes[i]->activate();
                     vertexes[i]->compute(v_msgbufs[i]);
-                    v_msgbufs[i].clear();//clear used msgs
-                    AggregatorT* agg=(AggregatorT*)get_aggregator();
-                    if(agg!=NULL)
+                    v_msgbufs[i].clear(); //clear used msgs
+                    AggregatorT* agg = (AggregatorT*)get_aggregator();
+                    if (agg != NULL)
                         agg->stepPartialV(vertexes[i]);
-                    if(vertexes[i]->is_active())
+                    if (vertexes[i]->is_active())
                         active_vcount++;
                 }
             }
@@ -175,22 +175,20 @@ public:
 
     void all_vcompute()
     {
-        active_vcount=0;
-        VMessageBufT* mbuf=(VMessageBufT*)get_message_buffer();
-        vector<MessageContainerT> & v_msgbufs=mbuf->get_v_msg_bufs();
-        for(BlockIter it=blocks.begin(); it!=blocks.end(); it++)
-        {
-            BlockT* block=*it;
-            block->activate();//vertex activates its block
-            for(int i=block->begin; i<block->size; i++)
-            {
+        active_vcount = 0;
+        VMessageBufT* mbuf = (VMessageBufT*)get_message_buffer();
+        vector<MessageContainerT>& v_msgbufs = mbuf->get_v_msg_bufs();
+        for (BlockIter it = blocks.begin(); it != blocks.end(); it++) {
+            BlockT* block = *it;
+            block->activate(); //vertex activates its block
+            for (int i = block->begin; i < block->size; i++) {
                 vertexes[i]->activate();
                 vertexes[i]->compute(v_msgbufs[i]);
-                v_msgbufs[i].clear();//clear used msgs
-                AggregatorT* agg=(AggregatorT*)get_aggregator();
-                if(agg!=NULL)
+                v_msgbufs[i].clear(); //clear used msgs
+                AggregatorT* agg = (AggregatorT*)get_aggregator();
+                if (agg != NULL)
                     agg->stepPartialV(vertexes[i]);
-                if(vertexes[i]->is_active())
+                if (vertexes[i]->is_active())
                     active_vcount++;
             }
         }
@@ -198,32 +196,27 @@ public:
 
     void active_bcompute()
     {
-        active_bcount=0;
-        BMessageBufT* mbuf=(BMessageBufT*)get_bmessage_buffer();
-        vector<BMessageContainerT> & b_msgbufs=mbuf->get_b_msg_bufs();
-        for(int i=0; i<blocks.size(); i++)
-        {
-            if(b_msgbufs[i].size()==0)
-            {
-                if(blocks[i]->is_active())
-                {
+        active_bcount = 0;
+        BMessageBufT* mbuf = (BMessageBufT*)get_bmessage_buffer();
+        vector<BMessageContainerT>& b_msgbufs = mbuf->get_b_msg_bufs();
+        for (int i = 0; i < blocks.size(); i++) {
+            if (b_msgbufs[i].size() == 0) {
+                if (blocks[i]->is_active()) {
                     blocks[i]->compute(b_msgbufs[i], vertexes);
-                    AggregatorT* agg=(AggregatorT*)get_aggregator();
-                    if(agg!=NULL)
+                    AggregatorT* agg = (AggregatorT*)get_aggregator();
+                    if (agg != NULL)
                         agg->stepPartialB(blocks[i]);
-                    if(blocks[i]->is_active())
+                    if (blocks[i]->is_active())
                         active_bcount++;
                 }
-            }
-            else
-            {
+            } else {
                 blocks[i]->activate();
                 blocks[i]->compute(b_msgbufs[i], vertexes);
-                b_msgbufs[i].clear();//clear used msgs
-                AggregatorT* agg=(AggregatorT*)get_aggregator();
-                if(agg!=NULL)
+                b_msgbufs[i].clear(); //clear used msgs
+                AggregatorT* agg = (AggregatorT*)get_aggregator();
+                if (agg != NULL)
                     agg->stepPartialB(blocks[i]);
-                if(blocks[i]->is_active())
+                if (blocks[i]->is_active())
                     active_bcount++;
             }
         }
@@ -231,67 +224,62 @@ public:
 
     void all_bcompute()
     {
-        active_bcount=0;
-        BMessageBufT* mbuf=(BMessageBufT*)get_bmessage_buffer();
-        vector<BMessageContainerT> & b_msgbufs=mbuf->get_b_msg_bufs();
-        for(int i=0; i<blocks.size(); i++)
-        {
+        active_bcount = 0;
+        BMessageBufT* mbuf = (BMessageBufT*)get_bmessage_buffer();
+        vector<BMessageContainerT>& b_msgbufs = mbuf->get_b_msg_bufs();
+        for (int i = 0; i < blocks.size(); i++) {
             blocks[i]->activate();
             blocks[i]->compute(b_msgbufs[i], vertexes);
-            b_msgbufs[i].clear();//clear used msgs
-            AggregatorT* agg=(AggregatorT*)get_aggregator();
-            if(agg!=NULL)
+            b_msgbufs[i].clear(); //clear used msgs
+            AggregatorT* agg = (AggregatorT*)get_aggregator();
+            if (agg != NULL)
                 agg->stepPartialB(blocks[i]);
-            if(blocks[i]->is_active())
+            if (blocks[i]->is_active())
                 active_bcount++;
         }
     }
 
     //user-defined graphLoader ==============================
-    virtual VertexT* toVertex(char* line)=0;//this is what user specifies!!!!!!
+    virtual VertexT* toVertex(char* line) = 0; //this is what user specifies!!!!!!
 
     void load_vertex(VertexT* v)
-    {//called by load_graph
+    { //called by load_graph
         vertexes.push_back(v);
-        if(v->is_active())
+        if (v->is_active())
             active_vcount++;
     }
 
     void load_graph(const char* inpath)
     {
         hdfsFS fs = getHdfsFS();
-        hdfsFile in=getRHandle(inpath, fs);
+        hdfsFile in = getRHandle(inpath, fs);
         LineReader reader(fs, in);
-        while(true)
-        {
+        while (true) {
             reader.readLine();
-            if(!reader.eof())
+            if (!reader.eof())
                 load_vertex(toVertex(reader.getLine()));
             else
                 break;
         }
         hdfsCloseFile(fs, in);
         hdfsDisconnect(fs);
-        cout<<"Worker "<<_my_rank<<": \""<<inpath<<"\" loaded"<<endl;//DEBUG !!!!!!!!!!
+        cout << "Worker " << _my_rank << ": \"" << inpath << "\" loaded" << endl; //DEBUG !!!!!!!!!!
     }
     //=======================================================
 
     //user-defined graphDumper ==============================
-    virtual void toline(BlockT* b, VertexT* v, BufferedWriter & writer)=0;//this is what user specifies!!!!!!
+    virtual void toline(BlockT* b, VertexT* v, BufferedWriter& writer) = 0; //this is what user specifies!!!!!!
     void vdump(const char* outpath)
     {
         hdfsFS fs = getHdfsFS();
-        BufferedWriter* writer=new BufferedWriter(outpath, fs, _my_rank);
+        BufferedWriter* writer = new BufferedWriter(outpath, fs, _my_rank);
 
-        for(BlockIter it=blocks.begin(); it!=blocks.end(); it++)
-        {
-            BlockT * block=*it;
-            for(int i=block->begin; i<block->begin+ block->size; i++)
-            {
+        for (BlockIter it = blocks.begin(); it != blocks.end(); it++) {
+            BlockT* block = *it;
+            for (int i = block->begin; i < block->begin + block->size; i++) {
                 writer->check();
                 toline(block, vertexes[i], *writer);
             }
-
         }
         delete writer;
         hdfsDisconnect(fs);
@@ -300,16 +288,13 @@ public:
     void bdump(const char* outpath)
     {
         hdfsFS fs = getHdfsFS();
-        BufferedWriter* writer=new BufferedWriter(outpath, fs);
+        BufferedWriter* writer = new BufferedWriter(outpath, fs);
 
-        for(BlockIter it=blocks.begin(); it!=blocks.end(); it++)
-        {
-            BlockT * block=*it;
-            for(int i=block->begin; i<block->begin + block->size; i++)
-            {
+        for (BlockIter it = blocks.begin(); it != blocks.end(); it++) {
+            BlockT* block = *it;
+            for (int i = block->begin; i < block->begin + block->size; i++) {
                 writer->check();
-                toline(block,  vertexes[i], *writer);
-
+                toline(block, vertexes[i], *writer);
             }
         }
         delete writer;
@@ -318,53 +303,46 @@ public:
 
     //=======================================================
 
-    virtual void blockInit(VertexContainer & vertexList, BlockContainer & blockList)=0;//worker.compute()
+    virtual void blockInit(VertexContainer& vertexList, BlockContainer& blockList) = 0; //worker.compute()
 
     //=======================================================
 
     void agg_sync()
     {
-        AggregatorT* agg=(AggregatorT*)get_aggregator();
-        if(agg!=NULL)
-        {
-            if(_my_rank!=MASTER_RANK)
-            {//send partialT to aggregator
+        AggregatorT* agg = (AggregatorT*)get_aggregator();
+        if (agg != NULL) {
+            if (_my_rank != MASTER_RANK) { //send partialT to aggregator
                 //%%%%%% gathering PartialT
-                PartialT* part=agg->finishPartial();
+                PartialT* part = agg->finishPartial();
                 slaveGather(*part);
                 //%%%%%% scattering FinalT
                 slaveBcast(*((FinalT*)global_agg));
-            }
-            else
-            {
+            } else {
                 //%%%%%% gathering PartialT
                 vector<PartialT*> parts(_num_workers);
                 masterGather(parts);
-                for(int i=0; i<_num_workers; i++)
-                {
-                    if(i!=MASTER_RANK)
-                    {
-                        PartialT* part=parts[i];
+                for (int i = 0; i < _num_workers; i++) {
+                    if (i != MASTER_RANK) {
+                        PartialT* part = parts[i];
                         agg->stepFinal(part);
                         delete part;
                     }
                 }
                 //%%%%%% scattering FinalT
-                FinalT* final=agg->finishFinal();
+                FinalT* final = agg->finishFinal();
                 //global_agg=final; //cannot if MASTER_RANK works as a slave, as agg->finishFinal() may change
-                *((FinalT*)global_agg)=*final;//deep copy
+                *((FinalT*)global_agg) = *final; //deep copy
                 masterBcast(*((FinalT*)global_agg));
             }
         }
     }
 
     // run the worker
-    void run(const WorkerParams & params)
+    void run(const WorkerParams& params)
     {
         //check path + init
-        if(_my_rank==MASTER_RANK)
-        {
-            if(dirCheck(params.input_path.c_str(), params.output_path.c_str(), _my_rank==MASTER_RANK, params.force_write)==-1)
+        if (_my_rank == MASTER_RANK) {
+            if (dirCheck(params.input_path.c_str(), params.output_path.c_str(), _my_rank == MASTER_RANK, params.force_write) == -1)
                 return;
         }
         init_timers();
@@ -373,49 +351,45 @@ public:
         ResetTimer(WORKER_TIMER);
         char tmp[5];
         sprintf(tmp, "%d", _my_rank);
-        string myfile=params.input_path + "/part_" + tmp;
+        string myfile = params.input_path + "/part_" + tmp;
         load_graph(myfile.c_str());
         //barrier for data loading
-        worker_barrier();//@@@@@@@@@@@@@
+        worker_barrier(); //@@@@@@@@@@@@@
         StopTimer(WORKER_TIMER);
-        PrintTimer("Load Time",WORKER_TIMER);
+        PrintTimer("Load Time", WORKER_TIMER);
 
         //=========================================================
 
         //-------- create blocks ----------
-        int prev=-1;
-        BlockT* block=NULL;
+        int prev = -1;
+        BlockT* block = NULL;
         int pos;
-        for(pos=0; pos<vertexes.size(); pos++)
-        {
-            int bid=vertexes[pos]->bid;
-            if(bid!=prev)
-            {
-                if(block!=NULL)
-                {
-                    block->size=pos-block->begin;
+        for (pos = 0; pos < vertexes.size(); pos++) {
+            int bid = vertexes[pos]->bid;
+            if (bid != prev) {
+                if (block != NULL) {
+                    block->size = pos - block->begin;
                     blocks.push_back(block);
                 }
-                block=new BlockT;
-                prev=block->bid=bid;
-                block->begin=pos;
+                block = new BlockT;
+                prev = block->bid = bid;
+                block->begin = pos;
             }
         }
         //flush
-        if(block!=NULL)
-        {
-            block->size=pos-block->begin;
+        if (block != NULL) {
+            block->size = pos - block->begin;
             blocks.push_back(block);
         }
-        active_bcount=getBNum();//initially, all blocks are active
+        active_bcount = getBNum(); //initially, all blocks are active
 
         //we do not allow adding vertices/blocks for current version
-        get_bnum()=all_sum(getBNum());
-        get_vnum()=all_sum(getVNum());
-        if(_my_rank==MASTER_RANK)
-            cout<<"* #{blocks} = "<<get_bnum()<<", #{vertices} = "<<get_vnum()<<endl;
+        get_bnum() = all_sum(getBNum());
+        get_vnum() = all_sum(getVNum());
+        if (_my_rank == MASTER_RANK)
+            cout << "* #{blocks} = " << get_bnum() << ", #{vertices} = " << get_vnum() << endl;
 
-        blockInit(vertexes, blocks);//setting user-defined block fields
+        blockInit(vertexes, blocks); //setting user-defined block fields
 
         vmessage_buffer->init(vertexes);
         bmessage_buffer->init(blocks);
@@ -424,153 +398,133 @@ public:
         init_timers();
         ResetTimer(WORKER_TIMER);
         //supersteps
-        global_step_num=0;
+        global_step_num = 0;
         long long step_vmsg_num;
         long long step_bmsg_num;
-        long long global_vmsg_num=0;
-        long long global_bmsg_num=0;
-        if(compute_mode==VB_COMP)
-        {
-            while(true)
-            {
+        long long global_vmsg_num = 0;
+        long long global_bmsg_num = 0;
+        if (compute_mode == VB_COMP) {
+            while (true) {
                 global_step_num++;
                 ResetTimer(4);
                 //===================
-                char bits_bor=all_bor(global_bor_bitmap);
-                if(getBit(FORCE_TERMINATE_ORBIT, bits_bor)==1)
+                char bits_bor = all_bor(global_bor_bitmap);
+                if (getBit(FORCE_TERMINATE_ORBIT, bits_bor) == 1)
                     break;
                 //get_vnum()=all_sum(getVNum()); //we do not allow adding vertices/blocks for current version
-                int wakeAll=getBit(WAKE_ALL_ORBIT, bits_bor);
-                if(wakeAll==0)
-                {
-                    active_vnum()=all_sum(active_vcount);
-                    active_bnum()=all_sum(active_bcount);
-                    if(active_vnum()==0 && active_bnum()==0 && getBit(HAS_MSG_ORBIT, bits_bor)==0)
-                        break;//all_halt AND no_msg
-                }
-                else
-                {
-                    active_vnum()=get_vnum();
-                    active_bnum()=get_bnum();
+                int wakeAll = getBit(WAKE_ALL_ORBIT, bits_bor);
+                if (wakeAll == 0) {
+                    active_vnum() = all_sum(active_vcount);
+                    active_bnum() = all_sum(active_bcount);
+                    if (active_vnum() == 0 && active_bnum() == 0 && getBit(HAS_MSG_ORBIT, bits_bor) == 0)
+                        break; //all_halt AND no_msg
+                } else {
+                    active_vnum() = get_vnum();
+                    active_bnum() = get_bnum();
                 }
                 //===================
-                AggregatorT* agg=(AggregatorT*)get_aggregator();
-                if(agg!=NULL)
+                AggregatorT* agg = (AggregatorT*)get_aggregator();
+                if (agg != NULL)
                     agg->init();
                 //===================
                 clearBits();
-                if(wakeAll==1)
-                {
+                if (wakeAll == 1) {
                     all_vcompute();
                     all_bcompute();
-                }
-                else
-                {
+                } else {
                     active_vcompute();
                     active_bcompute();
                 }
                 vmessage_buffer->combine();
                 bmessage_buffer->combine();
-                step_vmsg_num=master_sum_LL(vmessage_buffer->get_total_msg());
-                step_bmsg_num=master_sum_LL(bmessage_buffer->get_total_msg());
+                step_vmsg_num = master_sum_LL(vmessage_buffer->get_total_msg());
+                step_bmsg_num = master_sum_LL(bmessage_buffer->get_total_msg());
                 vmessage_buffer->sync_messages();
                 bmessage_buffer->sync_messages();
                 agg_sync();
                 //===================
                 //worker_barrier();
                 StopTimer(4);
-                if(_my_rank==MASTER_RANK)
-                {
-                    cout<<"Superstep "<<global_step_num<<" done. Time elapsed: "<<get_timer(4)<<" seconds"<<endl;
-                    cout<<"#vmsgs: "<<step_vmsg_num<<", #bmsgs: "<<step_bmsg_num<<endl;
+                if (_my_rank == MASTER_RANK) {
+                    cout << "Superstep " << global_step_num << " done. Time elapsed: " << get_timer(4) << " seconds" << endl;
+                    cout << "#vmsgs: " << step_vmsg_num << ", #bmsgs: " << step_bmsg_num << endl;
                 }
             }
-        }
-        else if(compute_mode==B_COMP)
-        {
-            while(true)
-            {
+        } else if (compute_mode == B_COMP) {
+            while (true) {
                 global_step_num++;
                 ResetTimer(4);
                 //===================
-                char bits_bor=all_bor(global_bor_bitmap);
-                if(getBit(FORCE_TERMINATE_ORBIT, bits_bor)==1)
+                char bits_bor = all_bor(global_bor_bitmap);
+                if (getBit(FORCE_TERMINATE_ORBIT, bits_bor) == 1)
                     break;
                 //get_vnum()=all_sum(getVNum()); //we do not allow adding vertices/blocks for current version
-                int wakeAll=getBit(WAKE_ALL_ORBIT, bits_bor);
-                if(wakeAll==0)
-                {
-                    active_bnum()=all_sum(active_bcount);
-                    if(active_bnum()==0 && getBit(HAS_MSG_ORBIT, bits_bor)==0)
-                        break;//all_halt AND no_msg
-                }
-                else
-                    active_bnum()=get_bnum();
+                int wakeAll = getBit(WAKE_ALL_ORBIT, bits_bor);
+                if (wakeAll == 0) {
+                    active_bnum() = all_sum(active_bcount);
+                    if (active_bnum() == 0 && getBit(HAS_MSG_ORBIT, bits_bor) == 0)
+                        break; //all_halt AND no_msg
+                } else
+                    active_bnum() = get_bnum();
                 //===================
-                AggregatorT* agg=(AggregatorT*)get_aggregator();
-                if(agg!=NULL)
+                AggregatorT* agg = (AggregatorT*)get_aggregator();
+                if (agg != NULL)
                     agg->init();
                 //===================
                 clearBits();
-                if(wakeAll==1)
+                if (wakeAll == 1)
                     all_bcompute();
                 else
                     active_bcompute();
                 bmessage_buffer->combine();
-                step_bmsg_num=master_sum_LL(bmessage_buffer->get_total_msg());
+                step_bmsg_num = master_sum_LL(bmessage_buffer->get_total_msg());
                 bmessage_buffer->sync_messages();
                 agg_sync();
                 //===================
                 //worker_barrier();
                 StopTimer(4);
-                if(_my_rank==MASTER_RANK)
-                {
-                    cout<<"Superstep "<<global_step_num<<" done. Time elapsed: "<<get_timer(4)<<" seconds"<<endl;
-                    cout<<"#bmsgs: "<<step_bmsg_num<<endl;
+                if (_my_rank == MASTER_RANK) {
+                    cout << "Superstep " << global_step_num << " done. Time elapsed: " << get_timer(4) << " seconds" << endl;
+                    cout << "#bmsgs: " << step_bmsg_num << endl;
                 }
             }
-        }
-        else// compute_mode==V_COMP
+        } else // compute_mode==V_COMP
         {
-            while(true)
-            {
+            while (true) {
                 global_step_num++;
                 ResetTimer(4);
                 //===================
-                char bits_bor=all_bor(global_bor_bitmap);
-                if(getBit(FORCE_TERMINATE_ORBIT, bits_bor)==1)
+                char bits_bor = all_bor(global_bor_bitmap);
+                if (getBit(FORCE_TERMINATE_ORBIT, bits_bor) == 1)
                     break;
                 //get_vnum()=all_sum(getVNum()); //we do not allow adding vertices/blocks for current version
-                int wakeAll=getBit(WAKE_ALL_ORBIT, bits_bor);
-                if(wakeAll==0)
-                {
-                    active_vnum()=all_sum(active_vcount);
-                    if(active_vnum()==0 && getBit(HAS_MSG_ORBIT, bits_bor)==0)
-                        break;//all_halt AND no_msg
-                }
-                else
-                    active_vnum()=get_vnum();
+                int wakeAll = getBit(WAKE_ALL_ORBIT, bits_bor);
+                if (wakeAll == 0) {
+                    active_vnum() = all_sum(active_vcount);
+                    if (active_vnum() == 0 && getBit(HAS_MSG_ORBIT, bits_bor) == 0)
+                        break; //all_halt AND no_msg
+                } else
+                    active_vnum() = get_vnum();
                 //===================
-                AggregatorT* agg=(AggregatorT*)get_aggregator();
-                if(agg!=NULL)
+                AggregatorT* agg = (AggregatorT*)get_aggregator();
+                if (agg != NULL)
                     agg->init();
                 //===================
                 clearBits();
-                if(wakeAll==1)
+                if (wakeAll == 1)
                     all_vcompute();
                 else
                     active_vcompute();
                 vmessage_buffer->combine();
-                step_vmsg_num=master_sum_LL(vmessage_buffer->get_total_msg());
+                step_vmsg_num = master_sum_LL(vmessage_buffer->get_total_msg());
                 vmessage_buffer->sync_messages();
                 agg_sync();
                 //===================
                 //worker_barrier();
                 StopTimer(4);
-                if(_my_rank==MASTER_RANK)
-                {
-                    cout<<"Superstep "<<global_step_num<<" done. Time elapsed: "<<get_timer(4)<<" seconds"<<endl;
-                    cout<<"#vmsgs: "<<step_vmsg_num<<endl;
+                if (_my_rank == MASTER_RANK) {
+                    cout << "Superstep " << global_step_num << " done. Time elapsed: " << get_timer(4) << " seconds" << endl;
+                    cout << "#vmsgs: " << step_vmsg_num << endl;
                 }
             }
         }
@@ -579,20 +533,19 @@ public:
         PrintTimer("Communication Time", COMMUNICATION_TIMER);
         PrintTimer("- Serialization Time", SERIALIZATION_TIMER);
         PrintTimer("- Transfer Time", TRANSFER_TIMER);
-        PrintTimer("Total Computational Time",WORKER_TIMER);
+        PrintTimer("Total Computational Time", WORKER_TIMER);
         ;
 
         // dump graph
         ResetTimer(WORKER_TIMER);
-        if(dump_mode==V_DUMP)
+        if (dump_mode == V_DUMP)
             vdump(params.output_path.c_str());
-        else
-        {
-            string outfile=params.output_path + "/part_" + tmp;
-            bdump(outfile.c_str());//dump_mode==B_DUMP
+        else {
+            string outfile = params.output_path + "/part_" + tmp;
+            bdump(outfile.c_str()); //dump_mode==B_DUMP
         }
         StopTimer(WORKER_TIMER);
-        PrintTimer("Dump Time",WORKER_TIMER);
+        PrintTimer("Dump Time", WORKER_TIMER);
     }
 };
 

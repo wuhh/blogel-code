@@ -5,32 +5,30 @@
 #include <stddef.h>
 using namespace std;
 
-template<class KeyT, class ValT>
-struct qelem
-{
+template <class KeyT, class ValT>
+struct qelem {
     KeyT key;
     ValT val;
     int pos;
 
     qelem()
-    {}
+    {
+    }
 
     qelem(KeyT key, ValT val)
     {
-        this->key=key;
-        this->val=val;
+        this->key = key;
+        this->val = val;
     }
 
     bool operator<(const qelem o) const
     {
-        return key<o.key;
+        return key < o.key;
     }
-
 };
 
-template<class KeyT, class ValT>
-class heap
-{
+template <class KeyT, class ValT>
+class heap {
 public:
     typedef qelem<KeyT, ValT> elemT;
 
@@ -82,74 +80,64 @@ public:
 
     //=================================
 
-    void add(elemT & newElement)
+    void add(elemT& newElement)
     {
         elements.push_back(NULL);
-        int index=elements.size()-1;
-        while(index>1 && !(*getParent(index)<newElement))
-        {
-            elemT* father=getParent(index);
-            elements[index]=father;
-            father->pos=index;
+        int index = elements.size() - 1;
+        while (index > 1 && !(*getParent(index) < newElement)) {
+            elemT* father = getParent(index);
+            elements[index] = father;
+            father->pos = index;
             index = getParentIndex(index);
         }
-        elements[index]=&newElement;
-        newElement.pos=index;
+        elements[index] = &newElement;
+        newElement.pos = index;
     }
 
-    void fix(elemT & ele)//decreaseKey
+    void fix(elemT& ele) //decreaseKey
     {
-        int pos=ele.pos;
-        while(pos>1)
-        {
-            elemT* father=getParent(pos);
-            if(*father<ele)
+        int pos = ele.pos;
+        while (pos > 1) {
+            elemT* father = getParent(pos);
+            if (*father < ele)
                 break;
-            elemT* tmp=elements[father->pos];
-            elements[father->pos]=elements[pos];
-            elements[pos]=tmp;
-            int temp=pos;
-            pos=father->pos;
-            father->pos=temp;
+            elemT* tmp = elements[father->pos];
+            elements[father->pos] = elements[pos];
+            elements[pos] = tmp;
+            int temp = pos;
+            pos = father->pos;
+            father->pos = temp;
         }
-        ele.pos=pos;
+        ele.pos = pos;
     }
 
-    elemT & peek()
+    elemT& peek()
     {
         return *elements[1];
     }
 
     void fixHeap()
     {
-        elemT* root=elements[1];
-        int lastIndex=elements.size()-1;
-        int index=1;
-        bool more=true;
-        while(more)
-        {
+        elemT* root = elements[1];
+        int lastIndex = elements.size() - 1;
+        int index = 1;
+        bool more = true;
+        while (more) {
             int childIndex = getLeftChildIndex(index);
-            if (childIndex <= lastIndex)
-            {
+            if (childIndex <= lastIndex) {
                 elemT* child = getLeftChild(index);
-                if (getRightChildIndex(index) <= lastIndex && *getRightChild(index)<*child)
-                {
+                if (getRightChildIndex(index) <= lastIndex && *getRightChild(index) < *child) {
                     childIndex = getRightChildIndex(index);
                     child = getRightChild(index);
                 }
-                if (*child<*root)
-                {
+                if (*child < *root) {
                     elements[index] = child;
                     child->pos = index;
                     index = childIndex;
-                }
-                else
-                {
+                } else {
                     more = false;
                 }
-            }
-            else
-            {
+            } else {
                 more = false;
             }
         }
@@ -163,15 +151,13 @@ public:
         int lastIndex = elements.size() - 1;
         elemT* last = elements[lastIndex];
         elements.resize(lastIndex);
-        if (lastIndex > 1)
-        {
-            elements[1]=last;
-            last->pos=1;
+        if (lastIndex > 1) {
+            elements[1] = last;
+            last->pos = 1;
             fixHeap();
         }
         return minimum;
     }
-
 };
 
 /*//sample code

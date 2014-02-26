@@ -3,7 +3,7 @@
 int main(int argc, char* argv[])
 {
     init_workers();
-    blogel_reach_vorPart("","");
+    blogel_reach_vorPart("", "");
     worker_finalize();
     return 0;
 }

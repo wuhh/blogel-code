@@ -5,8 +5,7 @@
 using namespace std;
 
 template <class KeyT, class MessageT>
-class BVecs
-{
+class BVecs {
 public:
     typedef vector<msgpair<KeyT, MessageT> > Vec;
     typedef vector<Vec> VecGroup;
@@ -16,8 +15,8 @@ public:
 
     BVecs()
     {
-        int np=_num_workers;
-        this->np=np;
+        int np = _num_workers;
+        this->np = np;
         vecs.resize(np);
     }
 
@@ -27,20 +26,19 @@ public:
         vecs[wid].push_back(item);
     }
 
-    Vec & getBuf(int pos)
+    Vec& getBuf(int pos)
     {
         return vecs[pos];
     }
 
-    VecGroup & getBufs()
+    VecGroup& getBufs()
     {
         return vecs;
     }
 
     void clear()
     {
-        for(int i=0; i<np; i++)
-        {
+        for (int i = 0; i < np; i++) {
             vecs[i].clear();
         }
     }
@@ -50,26 +48,20 @@ public:
 
     void combine()
     {
-        Combiner<MessageT> * combiner=(Combiner<MessageT> *)get_combiner();
-        for(int i=0; i<np; i++)
-        {
+        Combiner<MessageT>* combiner = (Combiner<MessageT>*)get_combiner();
+        for (int i = 0; i < np; i++) {
             sort(vecs[i].begin(), vecs[i].end());
             Vec newVec;
-            int size=vecs[i].size();
-            if(size>0)
-            {
+            int size = vecs[i].size();
+            if (size > 0) {
                 newVec.push_back(vecs[i][0]);
-                KeyT preKey=vecs[i][0].key;
-                for(int j=1; j<size; j++)
-                {
-                    msgpair<KeyT, MessageT> & cur=vecs[i][j];
-                    if(cur.key!=preKey)
-                    {
+                KeyT preKey = vecs[i][0].key;
+                for (int j = 1; j < size; j++) {
+                    msgpair<KeyT, MessageT>& cur = vecs[i][j];
+                    if (cur.key != preKey) {
                         newVec.push_back(cur);
-                        preKey=cur.key;
-                    }
-                    else
-                    {
+                        preKey = cur.key;
+                    } else {
                         combiner->combine(newVec.back().msg, cur.msg);
                     }
                 }
@@ -80,10 +72,9 @@ public:
 
     long long get_total_msg()
     {
-        long long sum=0;
-        for(int i=0; i<vecs.size(); i++)
-        {
-            sum+=vecs[i].size();
+        long long sum = 0;
+        for (int i = 0; i < vecs.size(); i++) {
+            sum += vecs[i].size();
         }
         return sum;
     }

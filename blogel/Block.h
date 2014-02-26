@@ -5,9 +5,8 @@
 #include "BMessageBuffer.h"
 using namespace std;
 
-template<class BValT, class BVertexT, class BMsgT> //BValT need not be serializable
-class Block
-{
+template <class BValT, class BVertexT, class BMsgT> //BValT need not be serializable
+class Block {
 public:
     int bid;
     int begin;
@@ -25,18 +24,20 @@ public:
 
     //====================================
 
-    virtual void compute(MessageContainer & messages, VertexContainer & vertexes)=0;
-    inline BValT & value()
+    virtual void compute(MessageContainer& messages, VertexContainer& vertexes) = 0;
+    inline BValT& value()
     {
         return _value;
     }
-    inline const BValT & value() const
+    inline const BValT& value() const
     {
         return _value;
     }
 
-    Block():active(true)
-    {}
+    Block()
+        : active(true)
+    {
+    }
 
     inline bool is_active()
     {
@@ -44,14 +45,14 @@ public:
     }
     inline void activate()
     {
-        active=true;
+        active = true;
     }
     inline void vote_to_halt()
     {
-        active=false;
+        active = false;
     }
 
-    void send_message(int bid, const int wid, const BMsgT & msg)
+    void send_message(int bid, const int wid, const BMsgT& msg)
     {
         ((BMessageBuffer<BlockT>*)get_bmessage_buffer())->addBMsg(bid, wid, msg);
     }
