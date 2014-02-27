@@ -49,7 +49,7 @@ public:
         //apply combiner
         Combiner<MessageT>* combiner = (Combiner<MessageT>*)get_bcombiner();
         if (combiner != NULL)
-            out_messages.combine();
+            out_messages.combine(combiner);
     }
 
     void sync_messages()

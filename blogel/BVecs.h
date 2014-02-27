@@ -47,9 +47,8 @@ public:
     //============================
     //apply combiner logic
 
-    void combine()
+    void combine(Combiner<MessageT>* combiner)
     {
-    	Combiner<MessageT>* combiner = (Combiner<MessageT>*)get_bcombiner();
         for (int i = 0; i < np; i++) {
             sort(vecs[i].begin(), vecs[i].end());
             Vec newVec;

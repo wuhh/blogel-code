@@ -149,7 +149,7 @@ public:
         for (BlockIter it = blocks.begin(); it != blocks.end(); it++)
         {
             BlockT* block = *it;
-            for (int i = block->begin; i < block->size; i++)
+            for (int i = block->begin; i < block->begin + block->size; i++)
             {
                 if (v_msgbufs[i].size() == 0)
                 {
@@ -189,7 +189,7 @@ public:
         {
             BlockT* block = *it;
             block->activate(); //vertex activates its block
-            for (int i = block->begin; i < block->size; i++)
+            for (int i = block->begin; i < block->begin + block->size; i++)
             {
                 vertexes[i]->activate();
                 vertexes[i]->compute(v_msgbufs[i]);
