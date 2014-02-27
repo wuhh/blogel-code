@@ -29,8 +29,10 @@ public:
         v->x = atof(pch);
         pch = strtok(NULL, "\t");
         v->y = atof(pch);
-        //////
-        while (pch = strtok(NULL, " ")) {
+        pch = strtok(NULL, " ");
+        int num = atoi(pch);
+        while (num --) {
+            pch = strtok(NULL, " ");
             int nb = atoi(pch);
             v->neighbors.push_back(nb);
             strtok(NULL, " "); //edge length
@@ -55,6 +57,7 @@ public:
         ss >> token; //vid
         ss >> token; //x
         ss >> token; //y
+        ss >> token; //num
         while (ss >> token) {
             int vid = atoi(token.c_str());
             ss >> token;
@@ -69,9 +72,9 @@ public:
 
 void blogel_sssp_STRRnd1(string in_path, string out_path)
 {
-    int xnum = 4;
-    int ynum = 4;
-    double sampleRate = 0.05;
+    int xnum = 20;
+    int ynum = 20;
+    double sampleRate = 0.01;
     //////
     WorkerParams param;
     param.input_path = in_path;

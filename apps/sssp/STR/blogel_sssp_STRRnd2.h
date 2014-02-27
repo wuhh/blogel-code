@@ -66,8 +66,8 @@ public:
 int blogel_sssp_STRRnd2(string in_path, string out_path)
 {
     WorkerParams param;
-    param.input_path = "/OL_STR_parted";
-    param.output_path = "/OL_STR_rnd2";
+    param.input_path = in_path;
+    param.output_path = out_path;
     param.force_write = true;
     STRRnd2 worker;
     worker.run(param);

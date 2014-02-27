@@ -250,12 +250,8 @@ public:
         pch = strtok(NULL, "\t");
         v->wid = atoi(pch);
         vector<SPEdge>& edges = v->value().edges;
-        int num;
-        pch = strtok(NULL, " ");
-        num = atoi(pch);
-        while (num--) {
+        while ( pch = strtok(NULL, " ") ) {
             SPEdge trip;
-            pch = strtok(NULL, " ");
             trip.nb = atoi(pch);
             pch = strtok(NULL, " ");
             trip.len = atof(pch);
@@ -309,6 +305,6 @@ void blogel_app_sssp(string in_path, string out_path)
     SPBlockWorker worker;
     worker.set_compute_mode(SPBlockWorker::VB_COMP);
     SPCombiner combiner;
-    worker.setCombiner(&combiner);
+//    worker.setCombiner(&combiner);
     worker.run(param);
 }

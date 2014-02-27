@@ -216,7 +216,7 @@ public:
         }
         hdfsCloseFile(fs, in);
         hdfsDisconnect(fs);
-        cout << "Worker " << _my_rank << ": \"" << inpath << "\" loaded" << endl; //DEBUG !!!!!!!!!!
+//        cout << "Worker " << _my_rank << ": \"" << inpath << "\" loaded" << endl; //DEBUG !!!!!!!!!!
     }
     //=======================================================
 
@@ -692,7 +692,7 @@ public:
         sync_graph();
 
         //barrier for data loading
-        //worker_barrier();
+        worker_barrier();
         StopTimer(WORKER_TIMER);
         PrintTimer("Load Time", WORKER_TIMER);
         message_buffer->init(vertexes);
@@ -769,7 +769,7 @@ public:
                 message_buffer->sync_messages();
             }
             //===================
-            //worker_barrier();
+            worker_barrier();
             StopTimer(4);
             if (_my_rank == MASTER_RANK)
                 cout << "Superstep " << global_step_num << " of Round " << round << " done. Time elapsed: " << get_timer(4) << " seconds" << endl;
@@ -810,7 +810,7 @@ public:
 
         //=========================================================
 
-        //worker_barrier();
+        worker_barrier();
         StopTimer(WORKER_TIMER);
         PrintTimer("Communication Time", COMMUNICATION_TIMER);
         PrintTimer("- Serialization Time", SERIALIZATION_TIMER);
@@ -826,6 +826,7 @@ public:
         strcat(fpath, buffer);
         dump_partition(fpath);
         delete fpath;
+        worker_barrier();
         StopTimer(WORKER_TIMER);
         PrintTimer("Dump Time", WORKER_TIMER);
     }

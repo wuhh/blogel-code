@@ -109,7 +109,7 @@ public:
         }
         hdfsCloseFile(fs, in);
         hdfsDisconnect(fs);
-        cout << "Worker " << _my_rank << ": \"" << inpath << "\" loaded" << endl; //DEBUG !!!!!!!!!!
+        //cout << "Worker " << _my_rank << ": \"" << inpath << "\" loaded" << endl; //DEBUG !!!!!!!!!!
     }
     //=======================================================
 
@@ -575,7 +575,7 @@ public:
         sync_graph();
 
         //barrier for data loading
-        //worker_barrier();
+        worker_barrier();
         StopTimer(WORKER_TIMER);
         PrintTimer("Load Time", WORKER_TIMER);
 
@@ -626,6 +626,7 @@ public:
 
         //=========================================================
 
+        worker_barrier();
         StopTimer(WORKER_TIMER);
         PrintTimer("Communication Time", COMMUNICATION_TIMER);
         PrintTimer("- Serialization Time", SERIALIZATION_TIMER);
@@ -644,6 +645,7 @@ public:
         strcat(fpath, buffer);
         dump_partition(fpath);
         delete fpath;
+        worker_barrier();
         StopTimer(WORKER_TIMER);
         PrintTimer("Dump Time", WORKER_TIMER);
     }

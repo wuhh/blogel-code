@@ -2,6 +2,7 @@
 #define BVECS_H_
 
 #include "utils/vecs.h" //for msgpair
+#include "BGlobal.h"
 using namespace std;
 
 template <class KeyT, class MessageT>
@@ -48,7 +49,7 @@ public:
 
     void combine()
     {
-        Combiner<MessageT>* combiner = (Combiner<MessageT>*)get_combiner();
+    	Combiner<MessageT>* combiner = (Combiner<MessageT>*)get_bcombiner();
         for (int i = 0; i < np; i++) {
             sort(vecs[i].begin(), vecs[i].end());
             Vec newVec;
