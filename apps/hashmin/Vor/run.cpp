@@ -3,7 +3,7 @@
 int main(int argc, char* argv[])
 {
     init_workers();
-    blogel_hashmin_vorPart("/pullgel/friend", "/vor/friend");
+    blogel_hashmin_vorPart("/pullgel/livej", "/vor/livej");
     worker_finalize();
     return 0;
 }

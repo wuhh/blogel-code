@@ -45,11 +45,11 @@ void blogel_hashmin_vorPart(string in_path, string out_path)
     param.force_write = true;
     param.native_dispatcher = false;
     bool to_undirected = false;
-    //friendster
+    //livej
     set_sampRate(0.001);
     set_maxHop(10);
     set_maxVCSize(100000);
-    set_factor(2);
+    set_factor(1.6);
     set_stopRatio(0.9);
     set_maxRate(0.1);
     MyWorker worker;

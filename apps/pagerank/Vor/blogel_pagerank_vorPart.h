@@ -51,7 +51,13 @@ void blogel_pagerank_vorPart(string in_path, string out_path)
     param.output_path = out_path;
     param.force_write = true;
     param.native_dispatcher = false;
-    //////
+    set_sampRate(0.001);
+    set_maxHop(30);
+    set_maxVCSize(500000);
+    set_factor(1.6);
+    set_stopRatio(1.0);
+    set_maxRate(0.2);
+    /////
     MyWorker worker;
     worker.run(param);
 }
