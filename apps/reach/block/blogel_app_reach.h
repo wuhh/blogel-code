@@ -8,8 +8,8 @@
 #include <iostream>
 using namespace std;
 
-int src = 0; //100
-//int src = 44881114;
+//int src = 0; //100
+int src = 44881114;
 int dst = -1; //10000;
 
 struct ReachVertexValue {
@@ -189,11 +189,13 @@ public:
         v->wid = atoi(pch);
         vector<triplet>& in_edges = v->value().in_edges;
         vector<triplet>& out_edges = v->value().out_edges;
+     //   pch = strtok(NULL, " ");
+     //   int num = atoi(pch);
         while (pch = strtok(NULL, " ")) {
             triplet trip;
             trip.vid = atoi(pch);
             pch = strtok(NULL, " ");
-            pch = strtok(NULL, " ");
+            //pch = strtok(NULL, " ");
             trip.bid = atoi(pch);
             pch = strtok(NULL, " ");
             trip.wid = atoi(pch);

@@ -45,13 +45,32 @@ void blogel_hashmin_vorPart(string in_path, string out_path)
     param.force_write = true;
     param.native_dispatcher = false;
     bool to_undirected = false;
-    //livej
+    //livej friend
+    /*
     set_sampRate(0.001);
     set_maxHop(10);
     set_maxVCSize(100000);
-    set_factor(1.6);
+    set_factor(2.0);
     set_stopRatio(0.9);
     set_maxRate(0.1);
+    */
+    //btc
+    /*
+    set_sampRate(0.001);
+    set_maxHop(20);
+    set_maxVCSize(500000);
+    set_factor(2.0);
+    set_stopRatio(0.95);
+    set_maxRate(0.1);
+    */
+    //webuk
+    set_sampRate(0.001);
+    set_maxHop(30);
+    set_maxVCSize(500000);
+    set_factor(1.6);
+    set_stopRatio(1.0);
+    set_maxRate(0.2);
+
     MyWorker worker;
     worker.run(param, to_undirected);
 }

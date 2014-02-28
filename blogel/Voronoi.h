@@ -369,6 +369,7 @@ public:
             //-------------------
             active_count = 0;
             MessageBufT* mbuf = (MessageBufT*)get_message_buffer();
+            mbuf->reinit(subgraph);
             vector<MessageContainerT>& v_msgbufs = mbuf->get_v_msg_bufs();
             for (int pos = 0; pos < subgraph.size(); pos++) {
                 BPartVertex& v = *subgraph[pos];

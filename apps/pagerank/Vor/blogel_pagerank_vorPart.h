@@ -1,40 +1,33 @@
 #include "blogel/Voronoi.h"
-#include "blogel/BAssign.h"
 #include <iostream>
 #include <sstream>
 #include "blogel/BGlobal.h"
 using namespace std;
 
-class MyWorker : public BAssignWorker {
+class MyWorker : public BPartWorker {
 public:
-    //vid \t bid numIn in1 in2 ... numOut out1 out2
-    virtual BAssignVertex* toVertex(char* line)
+    char buf[1024];
+    //C version
+    virtual BPartVertex* toVertex(char* line)
     {
         char* pch;
-        BAssignVertex* v = new BAssignVertex;
         pch = strtok(line, "\t");
+        BPartVertex* v = new BPartVertex;
         v->id = atoi(pch);
         pch = strtok(NULL, " ");
-        v->value().block = atoi(pch);
-        pch = strtok(NULL, " ");
         int num = atoi(pch);
-
-        for (int i = 0; i < num; i++) {
+        //v->value().color=-1;//default is -1
+        while (num--) {
             pch = strtok(NULL, " ");
-            int nb = atoi(pch);
-            v->value().neighbors.push_back(nb);
+            v->value().neighbors.push_back(atoi(pch));
         }
         return v;
     }
 
-    //me \t nb1 nb2 ...
-    //each item is of format "vertexID blockID workerID"
-    virtual void toline(BAssignVertex* v, BufferedWriter& writer) //key: "vertexID blockID slaveID"
+    virtual void toline(BPartVertex* v, BufferedWriter& writer) //key: "vertexID blockID slaveID"
     { //val: list of "vid block slave "
-        char buf[1024];
-        sprintf(buf, "%d %d %d\t", v->id, v->value().block, _my_rank);
+        sprintf(buf, "%d %d %d\t", v->id, v->value().color, _my_rank);
         writer.write(buf);
-
         vector<triplet>& vec = v->value().nbsInfo;
         for (int i = 0; i < vec.size(); i++) {
             sprintf(buf, "%d %d %d ", vec[i].vid, vec[i].bid, vec[i].wid);
@@ -51,13 +44,32 @@ void blogel_pagerank_vorPart(string in_path, string out_path)
     param.output_path = out_path;
     param.force_write = true;
     param.native_dispatcher = false;
+    bool to_undirected = true;
+    //livej friend
+    /*
+    set_sampRate(0.001);
+    set_maxHop(10);
+    set_maxVCSize(100000);
+    set_factor(2.0);
+    set_stopRatio(0.9);
+    set_maxRate(0.1);
+    */
+    //btc
+    /*
+    set_sampRate(0.001);
+    set_maxHop(20);
+    set_maxVCSize(500000);
+    set_factor(2.0);
+    set_stopRatio(0.95);
+    set_maxRate(0.1);
+    */
+    //webuk
     set_sampRate(0.001);
     set_maxHop(30);
     set_maxVCSize(500000);
     set_factor(1.6);
     set_stopRatio(1.0);
     set_maxRate(0.2);
-    /////
     MyWorker worker;
-    worker.run(param);
+    worker.run(param, to_undirected);
 }

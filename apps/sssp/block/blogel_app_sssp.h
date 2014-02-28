@@ -296,9 +296,13 @@ public:
         pch = strtok(NULL, "\t");
         v->wid = atoi(pch);
         vector<SPEdge>& edges = v->value().edges;
-        while ( pch = strtok(NULL, " ") )
+        pch = strtok(NULL, " ");
+        int num = atoi(pch);
+
+        while (num --)
         {
             SPEdge trip;
+            pch = strtok(NULL, " ");
             trip.nb = atoi(pch);
             pch = strtok(NULL, " ");
             trip.len = atof(pch);

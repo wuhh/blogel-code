@@ -426,6 +426,7 @@ public:
         bmessage_buffer->init(blocks);
         //=========================================================
 
+        worker_barrier(); //@@@@@@@@@@@@@
         init_timers();
         ResetTimer(WORKER_TIMER);
         //supersteps
@@ -489,7 +490,7 @@ public:
                 bmessage_buffer->sync_messages();
                 agg_sync();
                 //===================
-                //worker_barrier();
+                worker_barrier();
                 StopTimer(4);
                 if (_my_rank == MASTER_RANK)
                 {
@@ -539,7 +540,7 @@ public:
                 bmessage_buffer->sync_messages();
                 agg_sync();
                 //===================
-                //worker_barrier();
+                worker_barrier();
                 StopTimer(4);
                 if (_my_rank == MASTER_RANK)
                 {
@@ -587,7 +588,7 @@ public:
                 vmessage_buffer->sync_messages();
                 agg_sync();
                 //===================
-                //worker_barrier();
+                worker_barrier();
                 StopTimer(4);
                 if (_my_rank == MASTER_RANK)
                 {

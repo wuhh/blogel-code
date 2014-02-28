@@ -171,7 +171,7 @@ public:
             triplet cur;
             cur.vid = atoi(pch);
             pch = strtok(NULL, " ");
-            pch = strtok(NULL, " ");
+            //pch = strtok(NULL, " ");
             cur.bid = atoi(pch);
             pch = strtok(NULL, " ");
             cur.wid = atoi(pch);

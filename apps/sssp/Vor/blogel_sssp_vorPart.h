@@ -75,7 +75,11 @@ public:
         v->id = atoi(pch);
         pch = strtok(NULL, " "); //filter x
         pch = strtok(NULL, "\t"); //filter y
-        while (pch = strtok(NULL, " ")) {
+        pch = strtok(NULL, " ");
+        int num = atoi(pch);
+
+        while (num --) {
+            pch = strtok(NULL, " ");
             int nb = atoi(pch);
             v->value().neighbors.push_back(nb);
             strtok(NULL, " "); //edge length
@@ -99,6 +103,7 @@ public:
         ss >> token; //vid
         ss >> token; //x
         ss >> token; //y
+        ss >> token; //number
         int num = v->value().neighbors.size();
         sprintf(buf, "%d ", num);
         writer.write(buf);
@@ -126,11 +131,11 @@ int blogel_sssp_vorPart(string in_path, string out_path)
     bool to_undirected = false;
     //////
     set_sampRate(0.01);
-    set_maxHop(30);
-    set_maxVCSize(500);
-    set_stopRatio(0.9);
-    set_maxRate(0.2);
+    set_maxHop(50);
+    set_maxVCSize(1000000000);
     set_factor(2);
+    set_stopRatio(0.9);
+    set_maxRate(0.1);
     //////
     vorPart worker;
     worker.run(param, to_undirected);
