@@ -189,10 +189,11 @@ public:
         v->wid = atoi(pch);
         vector<triplet>& in_edges = v->value().in_edges;
         vector<triplet>& out_edges = v->value().out_edges;
-     //   pch = strtok(NULL, " ");
-     //   int num = atoi(pch);
-        while (pch = strtok(NULL, " ")) {
+        pch = strtok(NULL, " ");
+        int num = atoi(pch);
+        while (num--) {
             triplet trip;
+            pch = strtok(NULL, " ");
             trip.vid = atoi(pch);
             pch = strtok(NULL, " ");
             //pch = strtok(NULL, " ");

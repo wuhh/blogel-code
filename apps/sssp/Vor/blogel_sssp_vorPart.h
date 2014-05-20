@@ -71,10 +71,10 @@ public:
         char* pch;
         BPartVertex* v = new BPartVertex;
         v->value().content = line; //first set content!!! line will change later due to "strtok"
-        pch = strtok(line, " ");
+        pch = strtok(line, "\t");
         v->id = atoi(pch);
-        pch = strtok(NULL, " "); //filter x
-        pch = strtok(NULL, "\t"); //filter y
+//        pch = strtok(NULL, " "); //filter x
+//        pch = strtok(NULL, "\t"); //filter y
         pch = strtok(NULL, " ");
         int num = atoi(pch);
 
@@ -131,8 +131,8 @@ int blogel_sssp_vorPart(string in_path, string out_path)
     bool to_undirected = false;
     //////
     set_sampRate(0.01);
-    set_maxHop(50);
-    set_maxVCSize(1000000000);
+    set_maxHop(10);
+    set_maxVCSize(100000);
     set_factor(2);
     set_stopRatio(0.9);
     set_maxRate(0.1);

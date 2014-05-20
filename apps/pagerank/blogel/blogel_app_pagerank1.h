@@ -339,8 +339,11 @@ public:
         v->bid = atoi(pch);
         pch = strtok(NULL, "\t");
         v->wid = atoi(pch);
+//        pch = strtok(NULL, " ");
+  //      int num = atoi(pch);
         while (pch = strtok(NULL, " ")) {
             triplet trip;
+            //pch = strtok(NULL, " ");
             trip.vid = atoi(pch);
             pch = strtok(NULL, " ");
             trip.bid = atoi(pch);

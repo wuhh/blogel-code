@@ -1,4 +1,3 @@
-#include "blogel/Voronoi.h"
 #include "blogel/BAssign.h"
 #include <iostream>
 #include <sstream>

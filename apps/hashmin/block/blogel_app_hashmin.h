@@ -167,11 +167,15 @@ public:
         pch = strtok(NULL, "\t");
         v->wid = atoi(pch);
         //color will be assigned in Superstep 1
-        while (pch = strtok(NULL, " ")) {
+        
+        pch = strtok(NULL, " ");
+        int num = atoi(pch);
+        while (num--) {
             triplet cur;
+            pch = strtok(NULL, " ");
             cur.vid = atoi(pch);
             pch = strtok(NULL, " ");
-            //pch = strtok(NULL, " ");
+            pch = strtok(NULL, " ");
             cur.bid = atoi(pch);
             pch = strtok(NULL, " ");
             cur.wid = atoi(pch);

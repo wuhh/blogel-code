@@ -20,20 +20,34 @@ public:
         while (num--) {
             pch = strtok(NULL, " ");
             v->value().neighbors.push_back(atoi(pch));
+            v->value().content.push_back(atoi(pch));
         }
         return v;
     }
 
     virtual void toline(BPartVertex* v, BufferedWriter& writer) //key: "vertexID blockID slaveID"
     { //val: list of "vid block slave "
+    
         sprintf(buf, "%d %d %d\t", v->id, v->value().color, _my_rank);
         writer.write(buf);
+
         vector<triplet>& vec = v->value().nbsInfo;
+        hash_map<int, triplet> map;
         for (int i = 0; i < vec.size(); i++) {
-            sprintf(buf, "%d %d %d ", vec[i].vid, vec[i].bid, vec[i].wid);
+            map[vec[i].vid] = vec[i];
+        }
+        ////////
+        int num = v->value().content.size();
+        sprintf(buf, "%d ", num);
+        writer.write(buf);
+        for (int i = 0; i < num; i++) {
+            int vid = v->value().content[i];
+            triplet trip = map[vid];
+            sprintf(buf, "%d %d %d ", vid,trip.bid, trip.wid);
             writer.write(buf);
         }
         writer.write("\n");
+
     }
 };
 
