@@ -1,14 +1,14 @@
+#include "utils/communication.h"
 #include "utils/Combiner.h"
 #include "blogel/BVertex.h"
 #include "blogel/Block.h"
 #include "blogel/BWorker.h"
 #include "blogel/BGlobal.h"
-#include "blogel/Heap.h"
-
+#include "blogel/BType.h"
 #include <iostream>
 #include <vector>
 
-#define ROUND 10
+//#define ROUND 10
 
 using namespace std;
 
@@ -63,7 +63,7 @@ public:
     
 	virtual void compute(MessageContainer& messages, VertexContainer& vertexes) //multi-source Dijkstra (assume a super src node)
     {
-		if(step_num() > ROUND) vote_to_halt();
+//		if(step_num() > ROUND) vote_to_halt();
 		
         for (int i = begin; i < begin + size; i++)
         {
@@ -73,8 +73,10 @@ public:
 			{
 				if(vertex.value().delta>0)
 				{
+                    int split = vertex.value().split;
+                    vector<triplet>& edges = vertex.value().edges;
 					vertex.value().pr+=vertex.value().delta;
-					double update=0.85*vertex.value().delta/vertex.value().edges.size();
+					double update=0.85*vertex.value().delta/edges.size();
 					//in-block processing
 					for (int i = 0; i <= split; i++)
 					{
@@ -86,7 +88,7 @@ public:
 					for (int i = split + 1; i < edges.size(); i++)
 					{
 						triplet& v = edges[i];
-						uVertex.send_message(v.vid, v.wid, update);
+						send_message(v.vid, v.wid, update);
 					}
 				}
 				vertex.value().delta=0;
@@ -97,7 +99,7 @@ public:
 
 //====================================
 
-class DeltaBlockWorker : public BWorker<SPBlock>
+class DeltaBlockWorker : public BWorker<DeltaBlock>
 {
     char buf[1000];
 
@@ -116,14 +118,14 @@ public:
             for (int i = block->begin; i < block->begin + block->size; i++)
             {
                 DeltaVertex* vertex = vertexes[i];
-                vector<SPEdge>& edges = vertex->value().edges;
-                vector<SPEdge> tmp;
-                vector<SPEdge> tmp1;
+                vector<triplet>& edges = vertex->value().edges;
+                vector<triplet> tmp;
+                vector<triplet> tmp1;
                 for (int j = 0; j < edges.size(); j++)
                 {
-                    if (edges[j].block == block->bid)
+                    if (edges[j].bid == block->bid)
                     {
-                        edges[j].worker = map[edges[j].nb]; //workerID->array index
+                        edges[j].wid = map[edges[j].vid]; //workerID->array index
                         tmp.push_back(edges[j]);
                     }
                     else
@@ -150,7 +152,7 @@ public:
         v->bid = atoi(pch);
         pch = strtok(NULL, "\t");
         v->wid = atoi(pch);
-        vector<SPEdge>& edges = v->value().edges;
+        vector<triplet>& edges = v->value().edges;
         pch = strtok(NULL, " ");
         int num = atoi(pch);
 
@@ -192,7 +194,7 @@ void blogel_app_deltapr(string in_path, string out_path)
     param.output_path = out_path;
     param.force_write = true;
     DeltaBlockWorker worker;
-    worker.set_compute_mode(SPBlockWorker::VB_COMP);
+    worker.set_compute_mode(DeltaBlockWorker::VB_COMP);
     DeltaCombiner combiner;
     worker.setCombiner(&combiner);
     worker.run(param);
