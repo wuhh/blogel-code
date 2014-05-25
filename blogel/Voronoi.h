@@ -18,7 +18,7 @@ struct BPartValue {
     VertexID color; //block ID
     vector<VertexID> neighbors;
     vector<triplet> nbsInfo;
-    string content;
+    vector<VertexID> content;
 
     BPartValue()
         : color(-1)

@@ -17,7 +17,7 @@ struct BAssignValue {
     int block;
     vector<VertexID> neighbors;
     vector<triplet> nbsInfo;
-    string content;
+    vector<VertexID> content;
 };
 
 //no vertex-add, will not be called

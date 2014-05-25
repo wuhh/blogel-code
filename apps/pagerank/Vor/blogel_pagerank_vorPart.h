@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include "blogel/BGlobal.h"
+#include <cassert>
 using namespace std;
 
 class MyWorker : public BPartWorker {
@@ -21,33 +22,30 @@ public:
             pch = strtok(NULL, " ");
             v->value().neighbors.push_back(atoi(pch));
             v->value().content.push_back(atoi(pch));
+            assert(atoi(pch) >= 0);
         }
         return v;
     }
 
     virtual void toline(BPartVertex* v, BufferedWriter& writer) //key: "vertexID blockID slaveID"
     { //val: list of "vid block slave "
-    
         sprintf(buf, "%d %d %d\t", v->id, v->value().color, _my_rank);
         writer.write(buf);
-
         vector<triplet>& vec = v->value().nbsInfo;
-        hash_map<int, triplet> map;
-        for (int i = 0; i < vec.size(); i++) {
+        hash_map<int,triplet> map;
+        for (int i = 0; i < vec.size(); i++)
+        {
             map[vec[i].vid] = vec[i];
         }
-        ////////
-        int num = v->value().content.size();
-        sprintf(buf, "%d ", num);
-        writer.write(buf);
-        for (int i = 0; i < num; i++) {
+
+        for (int i = 0; i < v->value().content.size(); i++) {
             int vid = v->value().content[i];
+            assert(vid >= 0);
             triplet trip = map[vid];
-            sprintf(buf, "%d %d %d ", vid,trip.bid, trip.wid);
+            sprintf(buf, "%d %d %d ", vid, trip.bid, trip.wid);
             writer.write(buf);
         }
         writer.write("\n");
-
     }
 };
 
@@ -78,6 +76,15 @@ void blogel_pagerank_vorPart(string in_path, string out_path)
     set_maxRate(0.1);
     */
     //webuk
+    /*
+    set_sampRate(0.001);
+    set_maxHop(30);
+    set_maxVCSize(500000);
+    set_factor(1.6);
+    set_stopRatio(1.0);
+    set_maxRate(0.2);
+    */
+    //webbase
     set_sampRate(0.001);
     set_maxHop(30);
     set_maxVCSize(500000);

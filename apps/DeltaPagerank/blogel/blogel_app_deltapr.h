@@ -63,7 +63,7 @@ public:
     
 	virtual void compute(MessageContainer& messages, VertexContainer& vertexes) //multi-source Dijkstra (assume a super src node)
     {
-//		if(step_num() > ROUND) vote_to_halt();
+		if(step_num() > ROUND) vote_to_halt();
 		
         for (int i = begin; i < begin + size; i++)
         {
@@ -71,8 +71,8 @@ public:
 			if(step_num() > ROUND) vertex.vote_to_halt();
 			else
 			{
-				if(vertex.value().delta>0)
-				{
+				//if(vertex.value().delta>0)
+			//	{
                     int split = vertex.value().split;
                     vector<triplet>& edges = vertex.value().edges;
 					vertex.value().pr+=vertex.value().delta;
@@ -90,7 +90,7 @@ public:
 						triplet& v = edges[i];
 						send_message(v.vid, v.wid, update);
 					}
-				}
+			//	}
 				vertex.value().delta=0;
 			}
         }
@@ -153,13 +153,14 @@ public:
         pch = strtok(NULL, "\t");
         v->wid = atoi(pch);
         vector<triplet>& edges = v->value().edges;
-        pch = strtok(NULL, " ");
-        int num = atoi(pch);
+        //pch = strtok(NULL, " ");
+        //int num = atoi(pch);
 
-        while (num --)
+        //while (num --)
+        while( (pch = strtok(NULL, " "))  != NULL)
         {
             triplet trip;
-            pch = strtok(NULL, " ");
+            //pch = strtok(NULL, " ");
             trip.vid = atoi(pch);
             pch = strtok(NULL, " ");
             trip.bid = atoi(pch);
