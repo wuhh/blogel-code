@@ -43,11 +43,13 @@ class PRVertex : public BVertex<VertexID, PRValue, double> {
 public:
     virtual void compute(MessageContainer& messages)
     {
+        /*
         if(step_num() == 12)
         {
             vote_to_halt();
             return;
         }
+        */
         if (step_num() == 1) {
             //value().pr is initialized during data loading
             value().delta = EPS + 1; //init delta>EPS
