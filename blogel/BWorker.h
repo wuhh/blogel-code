@@ -640,10 +640,12 @@ public:
 
             if (compute_mode == VB_COMP) {
                 while (true) {
+
                     global_step_num++;
                     ResetTimer(4);
                     //===================
                     char bits_bor = all_bor(global_bor_bitmap);
+
                     if (getBit(FORCE_TERMINATE_ORBIT, bits_bor) == 1) {
                         terminate = true;
                         break;
@@ -651,10 +653,16 @@ public:
                     //get_vnum()=all_sum(getVNum()); //we do not allow adding vertices/blocks for current version
                     int wakeAll = getBit(WAKE_ALL_ORBIT, bits_bor);
                     if (wakeAll == 0) {
-                        active_vnum() = all_sum(active_vcount);
-                        active_bnum() = all_sum(active_bcount);
-                        if (active_vnum() == 0 && active_bnum() == 0 && getBit(HAS_MSG_ORBIT, bits_bor) == 0)
+                        if (phase_num() > 1 && step_num() == 1) {
+                            active_vnum() = vertexes.size();
+                            active_bnum() = blocks.size();
+                        } else {
+                            active_vnum() = all_sum(active_vcount);
+                            active_bnum() = all_sum(active_bcount);
+                        }
+                        if (active_vnum() == 0 && active_bnum() == 0 && getBit(HAS_MSG_ORBIT, bits_bor) == 0) {
                             break; //all_halt AND no_msg
+                        }
                     } else {
                         active_vnum() = get_vnum();
                         active_bnum() = get_bnum();
@@ -665,6 +673,7 @@ public:
                         agg->init();
                     //===================
                     clearBits();
+
                     if (wakeAll == 1) {
                         all_vcompute();
                         all_bcompute();
@@ -710,6 +719,12 @@ public:
                     //get_vnum()=all_sum(getVNum()); //we do not allow adding vertices/blocks for current version
                     int wakeAll = getBit(WAKE_ALL_ORBIT, bits_bor);
                     if (wakeAll == 0) {
+                        if (phase_num() > 1 && step_num() == 1) {
+                            active_bnum() = blocks.size();
+                        } else {
+                            active_bnum() = all_sum(active_bcount);
+                        }
+
                         active_bnum() = all_sum(active_bcount);
                         if (active_bnum() == 0 && getBit(HAS_MSG_ORBIT, bits_bor) == 0)
                             break; //all_halt AND no_msg
@@ -757,6 +772,12 @@ public:
                     //get_vnum()=all_sum(getVNum()); //we do not allow adding vertices/blocks for current version
                     int wakeAll = getBit(WAKE_ALL_ORBIT, bits_bor);
                     if (wakeAll == 0) {
+                        if (phase_num() > 1 && step_num() == 1) {
+                            active_vnum() = vertexes.size();
+
+                        } else {
+                            active_vnum() = all_sum(active_vcount);
+                        }
                         active_vnum() = all_sum(active_vcount);
                         if (active_vnum() == 0 && getBit(HAS_MSG_ORBIT, bits_bor) == 0)
                             break; //all_halt AND no_msg
