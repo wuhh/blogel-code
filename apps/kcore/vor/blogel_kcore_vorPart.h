@@ -5,31 +5,27 @@
 #include <sstream>
 using namespace std;
 
-class vorPart : public BPartWorker
-{
+class vorPart : public BPartWorker {
     char buf[1000];
 
 public:
-
     //========================== for version with coordinates
     //C version
     virtual BPartVertex* toVertex(char* line)
     {
-    	BPartVertex* v = new BPartVertex;
+        BPartVertex* v = new BPartVertex;
         istringstream ssin(line);
         ssin >> v->id;
         v->value().content.push_back(v->id);
         int num;
         ssin >> num;
         v->value().content.push_back(num);
-        for (int i = 0; i < num; i++)
-        {
+        for (int i = 0; i < num; i++) {
             int nb, m;
             ssin >> nb >> m;
             v->value().content.push_back(nb);
             v->value().content.push_back(m);
-            for (int j = 0; j < m; j++)
-            {
+            for (int j = 0; j < m; j++) {
                 int t;
                 ssin >> t;
                 v->value().content.push_back(t);
@@ -46,8 +42,7 @@ public:
 
         vector<triplet>& vec = v->value().nbsInfo;
         hash_map<int, triplet> map;
-        for (int i = 0; i < vec.size(); i++)
-        {
+        for (int i = 0; i < vec.size(); i++) {
             map[vec[i].vid] = vec[i];
         }
         ////////
@@ -55,19 +50,16 @@ public:
         int num = v->value().neighbors.size();
         sprintf(buf, "%d", num);
         writer.write(buf);
-        for (int i = 0; i < num; i++)
-        {
+        for (int i = 0; i < num; i++) {
             int vid = v->value().content[idx++];
             int m = v->value().content[idx++];
             triplet trip = map[vid];
-            sprintf(buf," %d %d %d %d",vid,trip.bid, trip.wid, m);
+            sprintf(buf, " %d %d %d %d", vid, trip.bid, trip.wid, m);
             writer.write(buf);
-            for(int j = 0 ; j < m;j ++)
-            {
-            	sprintf(buf, " %d", v->value().content[idx++]);
-            	writer.write(buf);
+            for (int j = 0; j < m; j++) {
+                sprintf(buf, " %d", v->value().content[idx++]);
+                writer.write(buf);
             }
-
         }
         writer.write("\n");
     }

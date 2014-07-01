@@ -32,9 +32,8 @@ public:
         sprintf(buf, "%d %d %d\t", v->id, v->value().color, _my_rank);
         writer.write(buf);
         vector<triplet>& vec = v->value().nbsInfo;
-        hash_map<int,triplet> map;
-        for (int i = 0; i < vec.size(); i++)
-        {
+        hash_map<int, triplet> map;
+        for (int i = 0; i < vec.size(); i++) {
             map[vec[i].vid] = vec[i];
         }
 

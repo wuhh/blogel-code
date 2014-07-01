@@ -200,9 +200,8 @@ public:
     void load_vertex(BPartVertex* v)
     { //called by load_graph
         vertexes.push_back(v);
-        if(v->is_active())
-        {
-        	active_count += 1;
+        if (v->is_active()) {
+            active_count += 1;
         }
     }
 
@@ -220,7 +219,7 @@ public:
         }
         hdfsCloseFile(fs, in);
         hdfsDisconnect(fs);
-//        cout << "Worker " << _my_rank << ": \"" << inpath << "\" loaded" << endl; //DEBUG !!!!!!!!!!
+        //        cout << "Worker " << _my_rank << ": \"" << inpath << "\" loaded" << endl; //DEBUG !!!!!!!!!!
     }
     //=======================================================
 
@@ -331,7 +330,7 @@ public:
                 active_count++;
             } else {
                 MapIter mit = map.find(color);
-                
+
                 if (mit->second > global_max_vcsize) { //case 2: Voronoi cell size overflow
                     (*it)->activate();
                     (*it)->value().color = -1; //erase old color
@@ -748,7 +747,7 @@ public:
                 }
                 lastNum = active_vnum();
             } //reporting }
-     
+
             if (active_vnum() == 0 && getBit(HAS_MSG_ORBIT, bits_bor) == 0) //all_halt AND no_msg
             {
                 if (_my_rank == MASTER_RANK)

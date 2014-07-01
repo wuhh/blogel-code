@@ -31,7 +31,7 @@ public:
         v->y = atof(pch);
         pch = strtok(NULL, " ");
         int num = atoi(pch);
-        while (num --) {
+        while (num--) {
             pch = strtok(NULL, " ");
             int nb = atoi(pch);
             v->neighbors.push_back(nb);
