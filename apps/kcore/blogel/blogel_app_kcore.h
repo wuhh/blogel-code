@@ -153,7 +153,7 @@ public:
                 currentT = *((int*)getAgg());
                 if(phase_num()>1 &&false)
                 {
-                	vertex.value().split = -1;
+                    vertex.value().split = -1;
 
                     vector<tripletX> newedges;
                     for(int i = 0 ;i < edges.size();i ++)
@@ -162,7 +162,7 @@ public:
                         {
                             newedges.push_back(edges[i]);
                             if(edges[i].bid == bid)
-                            	vertex.value().split  ++;
+                                vertex.value().split  ++;
                         }
 
                     }
@@ -178,7 +178,7 @@ public:
 
             if(step_num() == 3)
             {
-                cout << "~~~~~~~~~~~~~~~~~~~~~~~~ " << vertex.id <<  " " << vertex.value().edges.size() << endl;
+
                 if (Kvec.size() == 0)
                     Kvec.push_back(intpair(edges.size(), currentT));
                 else
@@ -192,31 +192,29 @@ public:
                     p[edges[i].vid.v1] = inf;
                 }
 
-                cout << "split: " << split << " " << edges.size()<< endl;
+
                 for (int j = 0; j <= split; j++)
                 {
-                    cout << j <<" " <<edges.size()<<endl;
+
                     tripletX& v = edges[j];
-                    cout <<j <<" " << v.wid <<" " << vertexes.size()<< " " <<vertexes[v.wid] <<endl;
+
                     kcoreT2Vertex& nb = *(vertexes[v.wid]);
                     if(K < nb.value().p[vertex.id])
                     {
                         nb.value().p[vertex.id] = K;
                     }
                 }
-                cout <<"hi yi" <<endl;
+
                 //out-block msg passing
                 for (int j = split + 1;j < edges.size(); j++)
                 {
-                    cout << j << " " << edges.size() << endl;
-
                     tripletX& v = edges[j];
                     vertex.send_message(v.vid.v1, v.wid, intpair(vertex.id, K));
                 }
             }
             else
             {
-                cout << "hi yanda" << endl;
+
                 int K = Kvec.back().v1;
                 int x = subfunc(&vertex); //
 
@@ -336,15 +334,9 @@ public:
                 edges.swap(tmp);
 
                 vertex->value().split = (int)(edges.size()) - 1;
-                if(vertex->id == 80)
-                {
-                    cout << edges.size() <<" " << edges.size() - 1 <<" " << (int)(edges.size()) - 1 <<" " <<vertex->value().split << endl;
-                }
+
                 edges.insert(edges.end(), tmp1.begin(), tmp1.end());
-                if(vertex->id == 80)
-                {
-                    cout << edges.size()<<endl;
-                }
+
             }
         }
         if (_my_rank == MASTER_RANK)
@@ -419,3 +411,4 @@ void blogel_app_kcore(string in_path, string out_path)
     worker.setAggregator(&agg);
     worker.run(param);
 }
+
