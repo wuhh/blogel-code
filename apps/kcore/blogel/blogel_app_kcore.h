@@ -14,7 +14,8 @@ using namespace std;
 
 const int inf = 1000000000;
 
-struct tripletX {
+struct tripletX
+{
     intpair vid;
     int bid;
     int wid;
@@ -40,7 +41,8 @@ struct tripletX {
     }
 };
 
-struct kcoreT2Value {
+struct kcoreT2Value
+{
     vector<intpair> K; // K, T
     vector<tripletX> edges; // vid, no of edges
     hash_map<int, int> p;
@@ -67,145 +69,196 @@ obinstream& operator>>(obinstream& m, kcoreT2Value& v)
 }
 
 //====================================
+class kcoreT2Vertex;
 
-class kcoreT2Vertex : public BVertex<VertexID, kcoreT2Value, intpair> {
+
+class kcoreT2Vertex : public BVertex<VertexID, kcoreT2Value, intpair>
+{
+    int currentT;
 public:
+
+
+    void remove_dominate(vector<intpair>& Kvec)
+    {
+        if (Kvec.size() >= 2)
+        {
+            int lastone = Kvec.size() - 1, lasttwo = Kvec.size() - 2;
+            if (Kvec[lastone].v1 == Kvec[lasttwo].v1)
+            {
+                swap(Kvec[lastone], Kvec[lasttwo]);
+                Kvec.pop_back();
+            }
+        }
+
+    }
+    void prepare_nextgraph(kcoreT2Vertex* v)
+    {
+        vector<tripletX>& edges = v->value().edges;
+        v->value().split = -1;
+
+        vector<tripletX> newedges;
+        for (int i = 0; i < edges.size(); i++)
+        {
+            if (edges[i].vid.v2 > currentT)
+            {
+                newedges.push_back(edges[i]);
+                if (edges[i].bid == bid)
+                    v->value().split++;
+            }
+        }
+        edges.swap(newedges);
+    }
+
     virtual void compute(MessageContainer& messages)
     {
-        if (step_num() > 3) {
-            vector<intpair>& Kvec = value().K;
-            vector<tripletX>& edges = value().edges;
-            hash_map<int, int>& p = value().p;
+        vector<intpair>& Kvec = value().K;
+        vector<tripletX>& edges = value().edges;
+        hash_map<int, int>& p = value().p;
+        if (step_num() == 1)
+        {
+            remove_dominate(Kvec);
+            return;
+        }
+        else if (step_num() == 2)
+        {
+            currentT = *((int*)getAgg());
+            if (phase_num() > 1)
+            {
+                prepare_nextgraph(this);
+            }
+            return;
+        }
+        else
+        {
 
+            if (step_num() == 3)
+            {
+            	currentT = *((int*)getAgg());
+                if (Kvec.size() == 0)
+                    Kvec.push_back(intpair(edges.size(), currentT));
+                else
+                    Kvec.push_back(intpair(min((int)edges.size(), Kvec.back().v1), currentT));
+
+
+                p.clear();
+                for (int i = 0; i < edges.size(); i++)
+                {
+                    p[edges[i].vid.v1] = inf;
+                }
+            }
             // To be consistent with edges list;
-            for (int i = 0; i < messages.size(); i++) {
+            for (int i = 0; i < messages.size(); i++)
+            {
                 int v = messages[i].v1;
 
                 if (messages[i].v2 < p[v])
                     p[v] = messages[i].v2;
             }
+
             vote_to_halt();
         }
     }
 };
 
-class kcoreT2Block : public Block<char, kcoreT2Vertex, char> {
+class kcoreT2Block : public Block<char, kcoreT2Vertex, char>
+{
 public:
     int currentT;
-
     int subfunc(kcoreT2Vertex* v)
     {
         vector<tripletX>& edges = v->value().edges;
         hash_map<int, int>& p = v->value().p;
         int K = v->value().K.back().v1;
         vector<int> cd(K + 2, 0);
-        for (int i = 0; i < edges.size(); i++) {
+        for (int i = 0; i < edges.size(); i++)
+        {
             int v = edges[i].vid.v1;
             if (p[v] > K)
                 p[v] = K;
             cd[p[v]]++;
         }
-        for (int i = K; i >= 1; i--) {
+        for (int i = K; i >= 1; i--)
+        {
             cd[i] += cd[i + 1];
             if (cd[i] >= i)
                 return i;
         }
+
         assert(0);
     }
     virtual void compute(MessageContainer& messages, VertexContainer& vertexes)
     {
 
-        for (int i = begin; i < begin + size; i++) {
+        if(step_num() < 3)
+            return;
+
+        for (int i = begin; i < begin + size; i++)
+        {
             kcoreT2Vertex& vertex = *(vertexes[i]);
             vector<intpair>& Kvec = vertex.value().K;
             vector<tripletX>& edges = vertex.value().edges;
             hash_map<int, int>& p = vertex.value().p;
             int split = vertex.value().split;
 
-            if (step_num() == 1) {
-                if (Kvec.size() >= 2) {
-                    int lastone = Kvec.size() - 1, lasttwo = Kvec.size() - 2;
-                    if (Kvec[lastone].v1 == Kvec[lasttwo].v1) {
-                        swap(Kvec[lastone], Kvec[lasttwo]);
-                        Kvec.pop_back();
-                    }
-                }
 
-                return;
-            } else if (step_num() == 2) {
+            if (step_num() == 3)
+            {
                 currentT = *((int*)getAgg());
-                if (phase_num() > 1) {
-                    vertex.value().split = -1;
-
-                    vector<tripletX> newedges;
-                    for (int i = 0; i < edges.size(); i++) {
-                        if (edges[i].vid.v2 > currentT) {
-                            newedges.push_back(edges[i]);
-                            if (edges[i].bid == bid)
-                                vertex.value().split++;
-                        }
-                    }
-                    edges.swap(newedges);
-                }
-                return;
-            } else if (step_num() == 3) {
-                currentT = *((int*)getAgg());
-            }
-
-            if (step_num() == 3) {
-
-                if (Kvec.size() == 0)
-                    Kvec.push_back(intpair(edges.size(), currentT));
-                else
-                    Kvec.push_back(intpair(min((int)edges.size(), Kvec.back().v1), currentT));
                 int K = Kvec.back().v1;
-
-                p.clear();
-
-                for (int i = 0; i < edges.size(); i++) {
-                    p[edges[i].vid.v1] = inf;
-                }
-
-                for (int j = 0; j <= split; j++) {
+                for (int j = 0; j <= split; j++)
+                {
 
                     tripletX& v = edges[j];
 
                     kcoreT2Vertex& nb = *(vertexes[v.wid]);
-                    if (K < nb.value().p[vertex.id]) {
+                    if (K < nb.value().p[vertex.id])
+                    {
                         nb.value().p[vertex.id] = K;
+                        nb.activate();
                     }
                 }
 
                 //out-block msg passing
-                for (int j = split + 1; j < edges.size(); j++) {
+                for (int j = split + 1; j < edges.size(); j++)
+                {
                     tripletX& v = edges[j];
                     vertex.send_message(v.vid.v1, v.wid, intpair(vertex.id, K));
                 }
-            } else {
-
-                int K = Kvec.back().v1;
-                int x = subfunc(&vertex); //
-
-                if (x < K) {
-                    K = x;
-
-                    for (int j = 0; j <= split; j++) {
-                        if (K < p[j]) {
+            }
+            else
+            {
+                if( edges.size() != 0)
+                {
+                    int K = Kvec.back().v1;
+                    int x = subfunc(&vertex); //
+                    if (x < K)
+                    {
+                        K = x;
+                        for (int j = 0; j <= split; j++)
+                        {
                             tripletX& v = edges[j];
                             kcoreT2Vertex& nb = *(vertexes[v.wid]);
-                            if (K < nb.value().p[vertex.id]) {
-                                nb.value().p[vertex.id] = K;
+                            if (K < p[v.vid.v1])
+                            {
+
+                                if (K < nb.value().p[vertex.id])
+                                {
+                                    nb.value().p[vertex.id] = K;
+                                    nb.activate();
+                                }
                             }
                         }
-                    }
-                    //out-block msg passing
-                    for (int j = split + 1; j < edges.size(); j++) {
-                        if (K < p[j]) {
+                        //out-block msg passing
+                        for (int j = split + 1; j < edges.size(); j++)
+                        {
                             tripletX& v = edges[j];
-                            vertex.send_message(v.vid.v1, v.wid, intpair(vertex.id, K));
+                            if (K < p[v.vid.v1])
+                            {
+                                vertex.send_message(v.vid.v1, v.wid, intpair(vertex.id, K));
+                            }
                         }
+                        Kvec.back().v1 = K;
                     }
-                    Kvec.back().v1 = K;
                 }
             }
         }
@@ -213,7 +266,8 @@ public:
     }
 };
 
-class kcoreT2Agg : public BAggregator<kcoreT2Vertex, kcoreT2Block, int, int> {
+class kcoreT2Agg : public BAggregator<kcoreT2Vertex, kcoreT2Block, int, int>
+{
 private:
     int currentT;
 
@@ -225,8 +279,10 @@ public:
 
     virtual void stepPartialV(kcoreT2Vertex* v)
     {
-        if (v->value().edges.size() != 0) {
-            currentT = min(currentT, v->value().edges.back().vid.v2);
+        vector<tripletX>& edges = v->value().edges;
+        for(int i = 0 ;i < edges.size(); i ++)
+        {
+            currentT = min(currentT, v->value().edges[i].vid.v2);
         }
     }
 
@@ -249,13 +305,16 @@ public:
     {
         if (currentT == inf)
             forceTerminate();
+        if(_my_rank == 0)
+            cout << currentT << endl;
         return &currentT;
     }
 };
 
 //====================================
 
-class kcoreT2BlockWorker : public BWorker<kcoreT2Block, kcoreT2Agg> {
+class kcoreT2BlockWorker : public BWorker<kcoreT2Block, kcoreT2Agg>
+{
     char buf[1000];
 
 public:
@@ -267,18 +326,23 @@ public:
         //////
         if (_my_rank == MASTER_RANK)
             cout << "Splitting in/out-block edges ..." << endl;
-        for (BlockIter it = blocks.begin(); it != blocks.end(); it++) {
+        for (BlockIter it = blocks.begin(); it != blocks.end(); it++)
+        {
             kcoreT2Block* block = *it;
-            for (int i = block->begin; i < block->begin + block->size; i++) {
+            for (int i = block->begin; i < block->begin + block->size; i++)
+            {
                 kcoreT2Vertex* vertex = vertexes[i];
                 vector<tripletX>& edges = vertex->value().edges;
                 vector<tripletX> tmp;
                 vector<tripletX> tmp1;
-                for (int j = 0; j < edges.size(); j++) {
-                    if (edges[j].bid == block->bid) {
+                for (int j = 0; j < edges.size(); j++)
+                {
+                    if (edges[j].bid == block->bid)
+                    {
                         edges[j].wid = map[edges[j].vid.v1]; //workerID->array index
                         tmp.push_back(edges[j]);
-                    } else
+                    }
+                    else
                         tmp1.push_back(edges[j]);
                 }
                 edges.swap(tmp);
@@ -288,7 +352,8 @@ public:
                 edges.insert(edges.end(), tmp1.begin(), tmp1.end());
             }
         }
-        if (_my_rank == MASTER_RANK) {
+        if (_my_rank == MASTER_RANK)
+        {
             cout << "In/out-block edges split" << endl;
         }
     }
@@ -304,10 +369,12 @@ public:
         vector<tripletX>& edges = v->value().edges;
         int num;
         ssin >> num;
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < num; i++)
+        {
             tripletX trip;
             ssin >> trip.vid.v1 >> trip.bid >> trip.wid >> trip.vid.v2;
-            for (int j = 0; j < trip.vid.v2; j++) {
+            for (int j = 0; j < trip.vid.v2; j++)
+            {
                 int t;
                 ssin >> t;
             }
@@ -318,18 +385,23 @@ public:
 
     virtual void toline(kcoreT2Block* b, kcoreT2Vertex* v, BufferedWriter& writer)
     {
+
         vector<intpair>& Kvec = v->value().K;
-        if (Kvec.size() >= 2) {
+        if (Kvec.size() >= 2)
+        {
             int lastone = Kvec.size() - 1, lasttwo = Kvec.size() - 2;
-            if (Kvec[lastone].v1 == Kvec[lasttwo].v1) {
+            if (Kvec[lastone].v1 == Kvec[lasttwo].v1)
+            {
                 swap(Kvec[lastone], Kvec[lasttwo]);
                 Kvec.pop_back();
             }
         }
         sprintf(buf, "%d", v->id);
         writer.write(buf);
-        for (int i = 0; i < v->value().K.size(); i++) {
-            if (v->value().K[i].v1 != 0) {
+        for (int i = 0; i < v->value().K.size(); i++)
+        {
+            if (v->value().K[i].v1 != 0)
+            {
                 sprintf(buf, "%s%d %d", i == 0 ? "\t" : " ", v->value().K[i].v1, v->value().K[i].v2);
                 writer.write(buf);
             }
@@ -348,5 +420,5 @@ void blogel_app_kcore(string in_path, string out_path)
     worker.set_compute_mode(kcoreT2BlockWorker::VB_COMP);
     kcoreT2Agg agg;
     worker.setAggregator(&agg);
-    worker.run(param);
+    worker.run(param, inf);
 }

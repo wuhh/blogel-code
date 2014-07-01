@@ -1,0 +1,11 @@
+Load Time : 11.521336 seconds
+* #{blocks} = 46056, #{vertices} = 1103412
+Splitting in/out-block edges ...
+In/out-block edges split
+################ Phase 1 ################
+1
+Superstep 1 done. Time elapsed: 0.20852 seconds
+#vmsgs: 0, #bmsgs: 0
+1
+Superstep 2 done. Time elapsed: 0.207692 seconds
+#vmsgs: 0, #bmsgs: 0
