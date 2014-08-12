@@ -21,10 +21,16 @@ public:
         ssin >> num;
         v->value().content.push_back(num);
         for (int i = 0; i < num; i++) {
-            int nb;
-            ssin >> nb;
-            v->value().neighbors.push_back(nb);
+            int nb, m;
+            ssin >> nb >> m;
             v->value().content.push_back(nb);
+            v->value().content.push_back(m);
+            for (int j = 0; j < m; j++) {
+                int t;
+                ssin >> t;
+                v->value().content.push_back(t);
+            }
+            v->value().neighbors.push_back(nb);
         }
         return v;
     }
@@ -46,9 +52,14 @@ public:
         writer.write(buf);
         for (int i = 0; i < num; i++) {
             int vid = v->value().content[idx++];
+            int m = v->value().content[idx++];
             triplet trip = map[vid];
-            sprintf(buf, " %d %d %d", vid, trip.bid, trip.wid);
+            sprintf(buf, " %d %d %d %d", vid, trip.bid, trip.wid, m);
             writer.write(buf);
+            for (int j = 0; j < m; j++) {
+                sprintf(buf, " %d", v->value().content[idx++]);
+                writer.write(buf);
+            }
         }
         writer.write("\n");
     }
