@@ -75,21 +75,21 @@ void blogel_pagerank_vorPart(string in_path, string out_path)
     set_maxRate(0.1);
     */
     //webuk
-    /*
     set_sampRate(0.001);
     set_maxHop(30);
     set_maxVCSize(500000);
     set_factor(1.6);
     set_stopRatio(1.0);
     set_maxRate(0.2);
-    */
     //webbase
+    /*
     set_sampRate(0.001);
     set_maxHop(30);
     set_maxVCSize(500000);
     set_factor(2);
     set_stopRatio(0.9);
     set_maxRate(0.1);
+    */
     MyWorker worker;
     worker.run(param, to_undirected);
 }
