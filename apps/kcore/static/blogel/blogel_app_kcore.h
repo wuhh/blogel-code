@@ -14,12 +14,10 @@ using namespace std;
 
 const int inf = 1000000000;
 
-struct kcoreValue
-{
+struct kcoreValue {
     int K;
     vector<triplet> edges; // vid, no of edges
     int split; //v.edges[0, ..., inSplit] are local to block
-
 };
 
 ibinstream& operator<<(ibinstream& m, const kcoreValue& v)
@@ -38,8 +36,7 @@ obinstream& operator>>(obinstream& m, kcoreValue& v)
     return m;
 }
 
-class kcoreVertex : public BVertex<VertexID, kcoreValue, char>
-{
+class kcoreVertex : public BVertex<VertexID, kcoreValue, char> {
 public:
     bool changed;
     virtual void compute(MessageContainer& messages)
@@ -48,42 +45,35 @@ public:
     }
 };
 
-class kcoreBlock : public Block<char, kcoreVertex, intpair>
-{
+class kcoreBlock : public Block<char, kcoreVertex, intpair> {
+public:
     hash_map<int, vector<int> > VsiNeighbor;
     hash_map<int, int> VsiP;
     hash_map<int, intpair> VsiInfo; // bid, wid;
-public:
     virtual void compute(MessageContainer& messages, VertexContainer& vertexes)
     {
-        if(step_num() > 1)
-        {
-            for(int i = 0 ; i < messages.size(); i ++)
-            {
+        if (step_num() > 1) {
+            for (int i = 0; i < messages.size(); i++) {
                 int k = messages[i].v2, v = messages[i].v1;
-                assert(VsiP.count(v) > 0);/////
+                assert(VsiP.count(v) > 0); /////
                 VsiP[v] = min(VsiP[v], k);
             }
         }
 
-
         // call algo6
 
-		// send msgs
-		
-        for(hash_map<int, vector<int> >::iterator it = VsiNeighbor.begin(); it != VsiNeighbor.end() ; it++)
-        {
+        // send msgs
+
+        for (hash_map<int, vector<int> >::iterator it = VsiNeighbor.begin(); it != VsiNeighbor.end(); it++) {
             assert(VsiP.count(it->first) > 0); ////
             int pu = VsiP[it->first];
             vector<int>& nb = it->second;
-            for(int i = 0 ; i < nb.size() ; i ++)
-            {
-                kcoreVertex& vertex = vertexes[ nb[i] ];
-                if(vertex.changed && vertex.value().K < pu)
-                {
+            for (int i = 0; i < nb.size(); i++) {
+                kcoreVertex& vertex = *vertexes[nb[i]];
+                if (vertex.changed && vertex.value().K < pu) {
                     intpair pair = VsiInfo[it->first];
                     int bid = pair.v1, wid = pair.v2;
-                    send_message(bid,wid,intpair(vertex.id,vertex.value().K));
+                    send_message(bid, wid, intpair(vertex.id, vertex.value().K));
                 }
             }
         }
@@ -92,9 +82,9 @@ public:
 
 //====================================
 
-class kcoreBlockWorker : public BWorker<kcoreBlock>
-{
+class kcoreBlockWorker : public BWorker<kcoreBlock> {
     char buf[1000];
+
 public:
     virtual void blockInit(VertexContainer& vertexes, BlockContainer& blocks)
     {
@@ -104,30 +94,24 @@ public:
         //////
         if (_my_rank == MASTER_RANK)
             cout << "Splitting in/out-block edges ..." << endl;
-        for (BlockIter it = blocks.begin(); it != blocks.end(); it++)
-        {
+        for (BlockIter it = blocks.begin(); it != blocks.end(); it++) {
             kcoreBlock* block = *it;
-            for (int i = block->begin; i < block->begin + block->size; i++)
-            {
+            for (int i = block->begin; i < block->begin + block->size; i++) {
                 kcoreVertex* vertex = vertexes[i];
                 vector<triplet>& edges = vertex->value().edges;
                 vector<triplet> tmp;
                 vector<triplet> tmp1;
-                for (int j = 0; j < edges.size(); j++)
-                {
-                    if (edges[j].bid == block->bid)
-                    {
+                for (int j = 0; j < edges.size(); j++) {
+                    if (edges[j].bid == block->bid) {
                         edges[j].wid = map[edges[j].vid]; //workerID->array index
                         tmp.push_back(edges[j]);
-                    }
-                    else
+                    } else
                         tmp1.push_back(edges[j]);
                     //////// Initialization for neighbor set and P
-                    VsiNeighbor[ edges[j].vid ].push_back(i);  //array index
-                    VsiP[ edges[j].vid ] = inf;
-                    if(VsiInfo.count(edges[j].vid) == 0)
-                    {
-                        VsiInfo[edges[j].vid] = intpiar(edges[j].bid,edges[j].wid);
+                    block->VsiNeighbor[edges[j].vid].push_back(i); //array index
+                    block->VsiP[edges[j].vid] = inf;
+                    if (block->VsiInfo.count(edges[j].vid) == 0) {
+                        block->VsiInfo[edges[j].vid] = intpair(edges[j].bid, edges[j].wid);
                     }
                 }
                 edges.swap(tmp);
@@ -135,8 +119,7 @@ public:
                 edges.insert(edges.end(), tmp1.begin(), tmp1.end());
             }
         }
-        if (_my_rank == MASTER_RANK)
-        {
+        if (_my_rank == MASTER_RANK) {
             cout << "In/out-block edges split" << endl;
         }
     }
@@ -151,8 +134,7 @@ public:
         vector<triplet>& edges = v->value().edges;
         int num;
         ssin >> num;
-        for (int i = 0; i < num; i++)
-        {
+        for (int i = 0; i < num; i++) {
             triplet trip;
             ssin >> trip.vid >> trip.bid >> trip.wid;
             edges.push_back(trip);
