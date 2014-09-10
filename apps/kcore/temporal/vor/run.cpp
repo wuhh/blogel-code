@@ -3,7 +3,7 @@
 int main(int argc, char* argv[])
 {
     init_workers();
-    blogel_kcore_vorPart("/huan/syn1", "/huan/syn1_part");
+    blogel_kcore_vorPart(argv[1], argv[2]);
     worker_finalize();
     return 0;
 }
