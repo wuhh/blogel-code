@@ -4,7 +4,7 @@
 #include <vector>
 #include "basic/Worker.h" //for WorkerParams
 #include "utils/communication.h"
-#include "utils/ydhdfs.h"
+#include "utils/io.h"
 #include "utils/Combiner.h"
 #include "VMessageBuffer.h"
 #include "BMessageBuffer.h"
