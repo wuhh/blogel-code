@@ -2,10 +2,10 @@
 #define BWORKER_H_
 
 #include <vector>
-#include "basic/Worker.h" //for WorkerParams
 #include "utils/communication.h"
-#include "utils/io.h"
+#include "utils/ydhdfs.h"
 #include "utils/Combiner.h"
+#include "utils/global.h"
 #include "VMessageBuffer.h"
 #include "BMessageBuffer.h"
 #include "BAggregator.h"

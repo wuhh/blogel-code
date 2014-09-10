@@ -129,8 +129,7 @@ public:
         for (int i = 0; i < messages.size(); i++) {
             int v = messages[i].v1;
 
-            if (messages[i].v2 < p[v])
-            {
+            if (messages[i].v2 < p[v]) {
                 p[v] = messages[i].v2;
             }
         }
