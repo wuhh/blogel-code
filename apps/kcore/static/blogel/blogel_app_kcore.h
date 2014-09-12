@@ -14,69 +14,99 @@ using namespace std;
 
 const int inf = 1000000000;
 
+struct tripletX {
+    VertexID vid;
+    int bid;
+    int wid;
+
+    int degree;
+    
+    bool operator==(const triplet& o) const
+    {
+        return vid == o.vid;
+    }
+
+    friend ibinstream& operator<<(ibinstream& m, const tripletX& idm)
+    {
+        m << idm.vid;
+        m << idm.bid;
+        m << idm.wid;
+        m << idm.degree;
+        return m;
+    }
+    friend obinstream& operator>>(obinstream& m, tripletX& idm)
+    {
+        m >> idm.vid;
+        m >> idm.bid;
+        m >> idm.wid;
+        m >> idm.degree;
+        return m;
+    }
+};
+
 struct kcoreValue {
-    int K;
-    vector<triplet> edges; // vid, no of edges
-    int split; //v.edges[0, ..., inSplit] are local to block
+    vector<triplet> in_edges;
+    vector<tripletX> out_edges;
 };
 
 ibinstream& operator<<(ibinstream& m, const kcoreValue& v)
 {
-    m << v.K;
-    m << v.edges;
-    m << v.split;
+    m << v.in_edges;
+    m << v.out_edges;
     return m;
 }
 
 obinstream& operator>>(obinstream& m, kcoreValue& v)
 {
-    m >> v.K;
-    m >> v.edges;
-    m >> v.split;
+    m >> v.in_edges;
+    m >> v.out_edges;
     return m;
 }
 
-class kcoreVertex : public BVertex<VertexID, kcoreValue, char> {
+class kcoreVertex : public BVertex<VertexID, kcoreValue, intpair> {
 public:
-    bool changed;
+    int K;
     virtual void compute(MessageContainer& messages)
     {
-        changed = false;
+        vector<triplet>& in_edges = value().in_edges;
+        vector<tripletX>& out_edges = value().out_edges;
+        int degree = in_edges.size() + out_edges.size();
+        if(step_num() == 1)
+        {
+            cout << id << endl;
+            for(int i = 0 ;i < out_edges.size(); i ++)
+            {
+                intpair msg(id, degree);
+                send_message(out_edges[i].vid, out_edges[i].wid, msg);
+            }
+            vote_to_halt();
+        }
+        else if(step_num() == 2)
+        {
+            hash_map<int,int> deg;
+            for(int i = 0; i < messages.size(); i ++)
+            {
+                deg[ messages[i].v1 ] = messages[i].v2;
+            }
+            for(int i = 0 ; i <  out_edges.size(); i ++)
+            {
+                assert(deg.count(out_edges[i].vid));
+                out_edges[i].degree = deg[ out_edges[i].vid  ];
+            }
+            vote_to_halt();
+        }
     }
 };
 
 class kcoreBlock : public Block<char, kcoreVertex, intpair> {
 public:
-    hash_map<int, vector<int> > VsiNeighbor;
-    hash_map<int, int> VsiP;
-    hash_map<int, intpair> VsiInfo; // bid, wid;
     virtual void compute(MessageContainer& messages, VertexContainer& vertexes)
     {
-        if (step_num() > 1) {
-            for (int i = 0; i < messages.size(); i++) {
-                int k = messages[i].v2, v = messages[i].v1;
-                assert(VsiP.count(v) > 0); /////
-                VsiP[v] = min(VsiP[v], k);
-            }
-        }
 
         // call algo6
 
         // send msgs
-
-        for (hash_map<int, vector<int> >::iterator it = VsiNeighbor.begin(); it != VsiNeighbor.end(); it++) {
-            assert(VsiP.count(it->first) > 0); ////
-            int pu = VsiP[it->first];
-            vector<int>& nb = it->second;
-            for (int i = 0; i < nb.size(); i++) {
-                kcoreVertex& vertex = *vertexes[nb[i]];
-                if (vertex.changed && vertex.value().K < pu) {
-                    intpair pair = VsiInfo[it->first];
-                    int bid = pair.v1, wid = pair.v2;
-                    send_message(bid, wid, intpair(vertex.id, vertex.value().K));
-                }
-            }
-        }
+        vote_to_halt();
     }
 };
 
@@ -98,25 +128,13 @@ public:
             kcoreBlock* block = *it;
             for (int i = block->begin; i < block->begin + block->size; i++) {
                 kcoreVertex* vertex = vertexes[i];
-                vector<triplet>& edges = vertex->value().edges;
-                vector<triplet> tmp;
-                vector<triplet> tmp1;
-                for (int j = 0; j < edges.size(); j++) {
-                    if (edges[j].bid == block->bid) {
-                        edges[j].wid = map[edges[j].vid]; //workerID->array index
-                        tmp.push_back(edges[j]);
-                    } else
-                        tmp1.push_back(edges[j]);
-                    //////// Initialization for neighbor set and P
-                    block->VsiNeighbor[edges[j].vid].push_back(i); //array index
-                    block->VsiP[edges[j].vid] = inf;
-                    if (block->VsiInfo.count(edges[j].vid) == 0) {
-                        block->VsiInfo[edges[j].vid] = intpair(edges[j].bid, edges[j].wid);
+                vector<triplet>& in_edges = vertex->value().in_edges;
+        
+                for (int j = 0; j < in_edges.size(); j++) {
+                    if (in_edges[j].bid == block->bid) {
+                        in_edges[j].wid = map[in_edges[j].vid]; //workerID->array index
                     }
                 }
-                edges.swap(tmp);
-                vertex->value().split = (int)(edges.size()) - 1;
-                edges.insert(edges.end(), tmp1.begin(), tmp1.end());
             }
         }
         if (_my_rank == MASTER_RANK) {
@@ -131,20 +149,37 @@ public:
         ssin >> v->id;
         ssin >> v->bid;
         ssin >> v->wid;
-        vector<triplet>& edges = v->value().edges;
+        vector<triplet>& in_edges = v->value().in_edges;
+        vector<tripletX>& out_edges = v->value().out_edges;
         int num;
         ssin >> num;
         for (int i = 0; i < num; i++) {
-            triplet trip;
-            ssin >> trip.vid >> trip.bid >> trip.wid;
-            edges.push_back(trip);
+            int vid, bid, wid;
+            ssin >> vid >> bid >> wid;
+            if(bid == v->bid)
+            {
+                triplet trip;
+                trip.vid = vid;
+                trip.bid = bid;
+                trip.wid = wid;
+                in_edges.push_back(trip);
+            }
+            else
+            {
+                tripletX trip;
+                trip.vid = vid;
+                trip.bid = bid;
+                trip.wid = wid;
+                trip.degree = -1;
+                out_edges.push_back(trip);
+            }
         }
         return v;
     }
 
     virtual void toline(kcoreBlock* b, kcoreVertex* v, BufferedWriter& writer)
     {
-        sprintf(buf, "%d\t%d\n", v->id, v->value().K);
+        sprintf(buf, "%d\t%d\n", v->id, v->K);
         writer.write(buf);
     }
 };
@@ -157,5 +192,5 @@ void blogel_app_kcore(string in_path, string out_path)
     param.force_write = true;
     kcoreBlockWorker worker;
     worker.set_compute_mode(kcoreBlockWorker::VB_COMP);
-    worker.run(param, inf);
+    worker.run(param);
 }

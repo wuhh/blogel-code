@@ -1,6 +1,6 @@
 CCOMPILE=mpic++
-PLATFORM=Linux-amd64-64
-CPPFLAGS= -I$(HADOOP_HOME)/src/c++/libhdfs -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -I ~/pregelplus-code -I ~/blogel-code
+PLATFORM=darwin
+CPPFLAGS= -I$(HADOOP_HOME)/src/c++/libhdfs -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/darwin -I ~/Desktop/pregelplus-code -I ~/Desktop/blogel-code
 LIB = -L$(HADOOP_HOME)/c++/$(PLATFORM)/lib
 LDFLAGS = -lhdfs -Wno-deprecated -O2
 

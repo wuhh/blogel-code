@@ -1,5 +1,5 @@
 #include "blogel_kcore_vorPart.h"
-
+#include "mpi.h"
 int main(int argc, char* argv[])
 {
     init_workers();

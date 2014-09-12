@@ -66,7 +66,7 @@ public:
     //========================== for version with coordinates
 };
 
-int blogel_kcore_vorPart(string in_path, string out_path)
+void blogel_kcore_vorPart(string in_path, string out_path)
 {
     WorkerParams param;
     param.input_path = in_path;
