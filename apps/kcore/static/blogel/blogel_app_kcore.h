@@ -14,8 +14,6 @@
 using namespace std;
 const int inf = 1e9;
 hash_map<int,int> psi;
-hash_map<int,int> deg;
-
 
 struct kcoreValue {
     vector<triplet> in_edges;
@@ -48,10 +46,11 @@ public:
 
         vector<triplet>& in_edges = value().in_edges;
         vector<triplet>& out_edges = value().out_edges;
-        degree = in_edges.size() + out_edges.size();
-        
+         
         if(step_num() == 1)
         {
+            degree = in_edges.size() + out_edges.size();
+            phi = degree;
             for(int i = 0 ;i < out_edges.size(); i ++)
             {
                 intpair msg(id, degree);
@@ -62,7 +61,7 @@ public:
         {
             for(int i = 0; i < messages.size(); i ++)
             {
-                deg[ messages[i].v1 ] = messages[i].v2;
+                psi[ messages[i].v1 ] = messages[i].v2;
             }
         }
         else
@@ -78,8 +77,8 @@ public:
                     psi[u] = k;
                 }
             }
+            vote_to_halt();
         }
-        vote_to_halt();
     }
 };
 
@@ -107,11 +106,13 @@ public:
         std::vector< std::list<int> > bin; // for binsort
         
         pos.resize(size, std::list<int>::iterator()); // size is the size of block // i - begin to get the index
-        bin.resize(maxDeg);
+        bin.resize(maxDeg + 1);
         
         for(int i = begin; i < begin + size; i ++)
         {
             kcoreVertex* v = vertexes[i];
+            assert(v->degree < bin.size());
+            assert(i - begin < pos.size());
             bin[ v->degree ].push_back(i); // i is the index, if you want to get the vertex, use vertexes[i]
             pos[ i - begin ] = --bin[ v->degree ].end();
         }
@@ -127,7 +128,6 @@ public:
 
         int S = size;
 
-
         while( S > 0 ) // while |S| > 0
         {
             while(psi_min < d_min)
@@ -139,15 +139,19 @@ public:
                     kcoreVertex* v = vertexes[idx];
                    
                     // move the vertex to another bin
-                    list<int>::iterator pt = pos[idx];
+                    assert(idx - begin < pos.size());
+                    list<int>::iterator pt = pos[idx - begin];
                     //move to another bin
                     if(v->degree > i)
                     {
+                        assert(v->degree < bin.size());
                         bin[ v->degree  ].erase(pt);
                         v->degree --;
+                        assert(v->degree < bin.size());
                         // erase
                         bin[ v->degree ].push_back(idx);
-                        pos[ v->id - begin ] = --bin[ v->degree ].end();
+                        assert(idx - begin < pos.size());
+                        pos[ idx - begin ] = --bin[ v->degree ].end();
                     }
                 }
                 // update d_min
@@ -161,6 +165,7 @@ public:
             }
             int idx = bin[i].front();
             kcoreVertex* v = vertexes[idx];
+            //cout << v->degree << " " << v->phi << endl;
             if (v->degree < v->phi)
             {
                 v->phi = v->degree;
@@ -174,16 +179,20 @@ public:
                 
                 if(u->degree > v->degree)
                 {
-                   // move the vertex to another bin
-                    list<int>::iterator pt = pos[uidx];
+                    // move the vertex to another bin
+                    assert(uidx - begin < pos.size());
+                    list<int>::iterator pt = pos[uidx - begin];
                     //move to another bin
                     if( u->degree > i)
                     {
+                        assert(u->degree < bin.size());
                         bin[ u->degree  ].erase(pt);
                         u->degree --;
                         // erase
+                        assert(u->degree < bin.size());
                         bin[ u->degree ].push_back(uidx);
-                        pos[ uidx ] = --bin[ u->degree ].end();
+                        assert(uidx - begin < pos.size());
+                        pos[ uidx - begin ] = --bin[ u->degree ].end();
                     }
                 }
             }
