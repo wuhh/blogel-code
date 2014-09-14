@@ -3,7 +3,7 @@
 int main(int argc, char* argv[])
 {
     init_workers();
-    blogel_kcore_vorPart("/temp/dblp", "/vor/dblp");
+    blogel_kcore_vorPart(argv[1], argv[2]);
     worker_finalize();
     return 0;
 }
