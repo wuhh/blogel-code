@@ -161,7 +161,11 @@ public:
             }
             int idx = bin[i].front();
             kcoreVertex* v = vertexes[idx];
-            v->phi = v->degree;
+            if (v->degree < v->phi)
+            {
+                v->phi = v->degree;
+                v->changed = true;
+            }
             
             for(int k = 0; k < v->value().in_edges.size(); k ++)
             {
