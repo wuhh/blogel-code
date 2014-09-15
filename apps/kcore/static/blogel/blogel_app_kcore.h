@@ -40,17 +40,23 @@ public:
     int phi;
     int degree;
     bool changed;
+    bool deleted;
     virtual void compute(MessageContainer& messages)
     {
         changed = false; // changed = false  at the beginning of each superstep
 
         vector<triplet>& in_edges = value().in_edges;
         vector<triplet>& out_edges = value().out_edges;
-         
+        degree = in_edges.size() + out_edges.size();
+        deleted = false;
         if(step_num() == 1)
         {
-            degree = in_edges.size() + out_edges.size();
             phi = degree;
+            if(degree == 0)
+            {
+                vote_to_halt();
+                return;
+            }
             for(int i = 0 ;i < out_edges.size(); i ++)
             {
                 intpair msg(id, degree);
@@ -84,6 +90,8 @@ public:
 
 int cmpPsi(const pair<int, vector<int>* >& p1, const pair<int, vector<int>* >& p2) 
 {
+    //assert(psi.count(p1.first));
+    //assert(psi.count(p2.first));
     return psi[p1.first] < psi[p2.first];
 }
 
@@ -95,24 +103,26 @@ public:
     {
         sort(Bplus.begin(), Bplus.end(), cmpPsi);
         /*
-        cout << "DEBUG: Bplus" << endl;
+        //cout << "DEBUG: Bplus" << endl;
 
         for(int i = 0; i < Bplus.size(); i ++)
         {
-            cout << "##### " <<  Bplus[i].first << endl;
+            //cout << "##### " <<  Bplus[i].first << endl;
             vector<int>* adj = Bplus[i].second;
             for(int k = 0; k < adj->size(); k ++)
             {
-                cout <<  vertexes[(*adj)[k]]->id << " ";
+                //cout <<  vertexes[(*adj)[k]]->id << " ";
             }
-            cout << endl;
+            //cout << endl;
         }
         */
 
         int maxDeg = 0;
         for(int i = begin; i < begin + size; i ++)
         {
+            //assert(i >= 0 && i < vertexes.size());
             kcoreVertex* v = vertexes[i];
+            //assert(v);
             maxDeg = max(maxDeg, v->degree);  
         }
        
@@ -126,36 +136,40 @@ public:
         {
 
             kcoreVertex* v = vertexes[i];
-            //cout << "add vid: " << v->id << " to bin: " << v->degree << endl;
+            //cout << "To add v" << v->id << " to bin: " << v->degree << endl;
+            //assert(v);
             //assert(v->degree < bin.size());
             //assert(i - begin < pos.size());
             bin[ v->degree ].push_back(i); // i is the index, if you want to get the vertex, use vertexes[i]
             pos[ i - begin ] = --bin[ v->degree ].end();
         }
         /*
-        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+        //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
         for(int kk = 0; kk < bin.size(); kk ++)
         {
-            cout << "DEBUG: bin " << kk << endl;
+            //cout << "DEBUG: bin " << kk << endl;
             for(list<int>::iterator it = bin[kk].begin(); it != bin[kk].end() ; it ++)
             {
-                cout <<  *it << " "; 
+                //cout <<  *it << " "; 
             }
-            cout << endl;
+            //cout << endl;
         }
-        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+        //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
         */
         int i = 0, j = 0;
         int d_min, psi_min = inf;
         // update d_min
-        while(i < maxDeg && bin[i].empty()) i ++;
-        if(i == maxDeg) return;
+        while(i <= maxDeg && bin[i].empty()) i ++;
+        if(i > maxDeg) return;
         else d_min = i;
         // update psh_min
-        if(j < Bplus.size()) psi_min = psi[Bplus[j].first];
+        if(j < Bplus.size()) 
+        {
+            //assert(psi.count(Bplus[j].first));
+            psi_min = psi[Bplus[j].first];
+        }
 
         int S = size;
-
         while( S > 0 ) // while |S| > 0
         {
             //cout << "bid = " << bid << " psi_min = " << psi_min << " d_min = " << d_min << endl;
@@ -163,45 +177,66 @@ public:
             {
                 //cout << "!!!! id: " << Bplus[j].first << endl;
                 vector<int>* adj = Bplus[j].second;
+                //assert(adj);
                 /*
                 for(int k = 0; k < adj->size(); k ++)
                 {
-                       cout <<  vertexes[(*adj)[k]]->id << " ";
+                       //cout <<  vertexes[(*adj)[k]]->id << " ";
                 }
-                cout << endl << "!!!!!!!!!" << endl;
+                //cout << endl << "!!!!!!!!!" << endl;
                 */
                 for(int k = 0; k < adj->size(); k ++)
                 {
                     int idx = (*adj)[k];
+                    //assert(idx >=0 && idx < vertexes.size());
                     kcoreVertex* v = vertexes[idx];
-
+                    if(v->deleted) continue;
+                    //assert(v);
+                    //assert(idx - begin >= 0);
                     // move the vertex to another bin
                     //assert(idx - begin < pos.size());
                     list<int>::iterator pt = pos[idx - begin];
 
                     //move to another bin
                     //cout << " id: " << v->id << " decrease to " << v->degree - 1 << endl;
-                    //assert(v->degree < bin.size());
+                    //assert(v->degree >=0 && v->degree < bin.size());
+                    //cout << "go to remove pt " << *pt <<" " << bin[v->degree].size() <<  endl;
+                    //for(list<int>::iterator it = bin[v->degree].begin(); it != bin[v->degree].end(); it ++)
+                    //{
+                        //cout <<  *it << " ";
+                    //}
+                    //cout << endl;
+                    //cout << "#####To remove v" << v->id << " from bin " << v->degree << endl; 
                     bin[ v->degree  ].erase(pt);
+                    //cout << "i remove pt" << endl;
                     v->degree --;
+                    //assert( v->degree - d_min >= -1 );
                     //assert(v->degree >= 0);
                     // erase
+                    //cout << "#####To add v" << v->id << " to bin " << v->degree << endl;
                     bin[ v->degree ].push_back(idx);
-                    //assert(idx - begin < pos.size());
+                    //assert(idx - begin >=0 && idx - begin < pos.size());
                     pos[ idx - begin ] = --bin[ v->degree ].end();
                 }
+                //cout << "go to update d_min" << endl;
                 // update d_min
                 i --; //???????
-                while(i < maxDeg && bin[i].empty()) i ++;
-                if(i == maxDeg) return;
+                //assert(i >= 0);
+                while(i <= maxDeg && bin[i].empty()) i ++;
+                if(i > maxDeg) return;
                 else d_min = i;
                 // update psh_min
                 j ++;
                 if(j < Bplus.size())  psi_min = psi[Bplus[j].first];
                 else psi_min = inf;
             }
+            //assert(bin[i].empty() == false);
             int idx = bin[i].front();
+            //cout << "Pick up v" << vertexes[idx]->id << " from bin " << i << " the size is " << bin[i].size() << endl;
+            //assert(idx >= 0 && idx < vertexes.size());
+            //cout << "idx: " << idx << " " << vertexes.size() << endl;
             kcoreVertex* v = vertexes[idx];
+            //assert(v);
             //cout << "id: " << v->id << " degree: " << v->degree << " phi: " << v->phi << endl;
             if (v->degree < v->phi)
             {
@@ -213,48 +248,61 @@ public:
             {
                 int uidx = v->value().in_edges[k].wid; 
                 kcoreVertex* u = vertexes[uidx];
-
+                if(u->deleted) continue;
                 if(u->degree > v->degree)
                 {
                     // move the vertex to another bin
                     //assert(uidx - begin < pos.size());
                     list<int>::iterator pt = pos[uidx - begin];
                     //move to another bin
-                    if( u->degree > i)
-                    {
-                        //assert(u->degree < bin.size());
-                        bin[ u->degree  ].erase(pt);
-                        u->degree --;
-                        // erase
-                        //assert(u->degree < bin.size());
-                        bin[ u->degree ].push_back(uidx);
-                        //assert(uidx - begin < pos.size());
-                        pos[ uidx - begin ] = --bin[ u->degree ].end();
-                    }
+                    //assert(u->degree < bin.size());
+
+                    //cout << "~~~~~To remove v" << u->id << " from bin " << u->degree << endl; 
+                    bin[ u->degree  ].erase(pt);
+                    u->degree --;
+                    // erase
+                    //assert(u->degree < bin.size());
+                    bin[ u->degree ].push_back(uidx);
+                    //cout << "~~~~~~To add v" << u->id << " to bin " << u->degree << endl;
+                    //assert(uidx - begin < pos.size());
+                    pos[ uidx - begin ] = --bin[ u->degree ].end();
                 }
             }
             //remove v
             list<int>::iterator pt = pos[idx - begin];
-            
-            //cout << "before bin size: " << bin[v->degree].size() << " to remove vid: " << *pt << endl;
             /*
+            //cout << "before bin size: " << bin[v->degree].size() << " to remove vid: " << *pt << endl;
             for(int kk = 0; kk < bin.size(); kk ++)
             {
-                cout << "DEBUG: bin " << kk << endl;
-                for(list<int>::iterator it = bin[kk].begin(); it != bin[kk].end() ; it ++)
-                {
-                    cout <<  *it << " "; 
-                }
-                cout << endl;
+            //cout << "DEBUG: bin " << kk << endl;
+            for(list<int>::iterator it = bin[kk].begin(); it != bin[kk].end() ; it ++)
+            {
+            //cout <<  *it << " "; 
             }
-            */
+            //cout << endl;
+            }
+             */
+
+            //cout << "---------To remove v" << v->id << " from bin " << v->degree <<" bin size: " <<   bin[v->degree].size() << endl;
+            v->deleted = true;
+
+            //if(v->id == 175) cout << "HAHA:" << *(bin[v->degree].begin())  <<" " <<  (pt == bin[v->degree].begin())<<endl;
+
             bin[ v->degree  ].erase(pt);
+            //cout << "remove v" << v->id << " peacefully" << endl;
+
+
             //cout << "remove " << v->id << " from bin " << v->degree << " , bin size = " << bin[v->degree].size() << endl;
             S --;
             // update d_min
-            while(i < maxDeg && bin[i].empty()) i ++;
-            if(i == maxDeg) return;
+            //cout << "i = " << i << " maxDeg: " << maxDeg << " bin size: " << bin.size() << endl;
+            while(i <= maxDeg && bin[i].empty())
+            {
+                i ++;
+            }
+            if(i > maxDeg) return;
             else d_min = i;
+            //cout << "Iteration ends" << endl;
         }
     }
     virtual void compute(MessageContainer& messages, VertexContainer& vertexes)
@@ -284,14 +332,14 @@ public:
             for(hash_map<int, vector<int>* >::iterator it = extend.begin(); it != extend.end(); it ++)
             {
                 /*
-                cout << "~~~~~~~: " << it->first << endl;
+                //cout << "~~~~~~~: " << it->first << endl;
                 vector<int> vec = *(it->second);
                 for(int i = 0 ;i < vec.size(); i ++)
                 {
-                    cout << vertexes[ vec[i]  ]->id << " ";
+                //cout << vertexes[ vec[i]  ]->id << " ";
                 }
-                cout << endl;
-                */
+                //cout << endl;
+                 */
                 Bplus.push_back(*it);
             }
         }
@@ -299,7 +347,6 @@ public:
         {
             // call algo5 binsort
             binsort(vertexes);
-
             // send msgs
             for(int i = begin; i < begin + size; i ++)
             {
