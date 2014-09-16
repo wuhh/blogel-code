@@ -238,6 +238,7 @@ public:
         else if(step_num() > 1)
         {
             // call algo5 binsort
+
             binsort(vertexes);
             // send msgs
             for(int i = begin; i < begin + size; i ++)
@@ -249,7 +250,7 @@ public:
                     for(int j = 0; j < out_edges.size(); j ++)
                     {
                         intpair msg(v->id, v->phi);
-                        v->send_message(out_edges[i].vid, out_edges[i].wid, msg);
+                        v->send_message(out_edges[j].vid, out_edges[j].wid, msg);
                     }
                 }
             }

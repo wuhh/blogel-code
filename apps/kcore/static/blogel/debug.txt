@@ -1,0 +1,430 @@
+Load Time : 0.649090 seconds
+* #{blocks} = 292, #{vertices} = 18772
+Splitting in/out-block edges ...
+In/out-block edges split
+Superstep 1 done. Time elapsed: 0.0238318 seconds
+#vmsgs: 76468, #bmsgs: 0
+bin start bid: 15
+bin complete bid: 15
+0x7fd530f14cb0
+0x7fd530f14d50
+next block
+bin start bid: 20
+bin complete bid: 20
+0x7fd530f14db0
+0x7fd530f14e10
+next block
+bin start bid: 37
+bin complete bid: 37
+0x7fd530f14e70
+0x7fd530f14f60
+0x7fd530f14fc0
+next block
+bin start bid: 51
+bin complete bid: 51
+0x7fd530f15040
+0x7fd530f150c0
+0x7fd530f15140
+next block
+bin start bid: 65
+bin complete bid: 65
+0x7fd530f15250
+0x7fd530f152f0
+0x7fd530f15390
+0x7fd530f153f0
+0x7fd530f15490
+next block
+bin start bid: 71
+bin complete bid: 71
+0x7fd530f15530
+0x7fd530f155d0
+0x7fd530f15790
+0x7fd530f15850
+0x7fd530f158b0
+0x7fd530f15910
+0x7fd530f159b0
+0x7fd530f15a10
+next block
+bin start bid: 115
+bin complete bid: 115
+0x7fd530f15ad0
+0x7fd530f15b30
+0x7fd530f15b90
+next block
+bin start bid: 119
+bin complete bid: 119
+0x7fd530f15bf0
+0x7fd530f15c50
+next block
+bin start bid: 130
+bin complete bid: 130
+0x7fd530f15cb0
+0x7fd530f15d10
+next block
+bin start bid: 171
+bin complete bid: 171
+0x7fd530f15d70
+0x7fd530f15e50
+0x7fd530f15eb0
+0x7fd530f15f70
+0x7fd530f15f10
+0x7fd530f15710
+0x7fd530f16210
+next block
+bin start bid: 180
+bin complete bid: 180
+0x7fd530f162d0
+0x7fd530f16330
+0x7fd530f16390
+next block
+bin start bid: 236
+bin complete bid: 236
+0x7fd530f163f0
+0x7fd530f16450
+0x7fd530f164e0
+0x7fd530f16570
+next block
+bin start bid: 239
+bin complete bid: 239
+0x7fd530f16600
+0x7fd530f16690
+0x7fd530f16710
+next block
+bin start bid: 241
+bin complete bid: 241
+0x7fd530f16790
+0x7fd530f16810
+0x7fd530f168a0
+0x7fd530f16930
+next block
+bin start bid: 309
+bin complete bid: 309
+0x7fd530f169c0
+0x7fd530f16a50
+0x7fd530f16ae0
+0x7fd530f16b70
+next block
+bin start bid: 312
+bin complete bid: 312
+0x7fd530f16c00
+0x7fd530f16c60
+next block
+bin start bid: 319
+bin complete bid: 319
+0x7fd530f16cc0
+0x7fd530f16d50
+0x7fd530f16dd0
+next block
+bin start bid: 341
+bin complete bid: 341
+0x7fd530f16e50
+0x7fd530f16eb0
+next block
+bin start bid: 351
+bin complete bid: 351
+0x7fd530f16f10
+0x7fd530f16fc0
+0x7fd530f17040
+next block
+bin start bid: 364
+bin complete bid: 364
+0x7fd530f15fd0
+0x7fd530f16050
+0x7fd530f160d0
+next block
+bin start bid: 374
+bin complete bid: 374
+0x7fd530f16150
+0x7fd530f170c0
+0x7fd530f17120
+next block
+bin start bid: 386
+bin complete bid: 386
+0x7fd530f17180
+0x7fd530f17230
+0x7fd530f172b0
+0x7fd530f17310
+0x7fd530f173f0
+next block
+bin start bid: 392
+bin complete bid: 392
+0x7fd530f17450
+0x7fd530f174b0
+next block
+bin start bid: 398
+bin complete bid: 398
+0x7fd530f17510
+0x7fd530f17590
+0x7fd530f17610
+next block
+bin start bid: 414
+bin complete bid: 414
+0x7fd530f17690
+0x7fd530f17710
+0x7fd530f17790
+0x7fd530f17870
+0x7fd530f178d0
+next block
+bin start bid: 423
+bin complete bid: 423
+0x7fd530f17930
+0x7fd530f17990
+0x7fd530f17a10
+next block
+bin start bid: 428
+bin complete bid: 428
+0x7fd530f17a90
+0x7fd530f17b10
+0x7fd530f17b90
+next block
+bin start bid: 444
+bin complete bid: 444
+0x7fd530f17c10
+0x7fd530f17c70
+next block
+bin start bid: 464
+bin complete bid: 464
+0x7fd530f17cd0
+0x7fd530f17d40
+next block
+bin start bid: 504
+bin complete bid: 504
+0x7fd530f17db0
+0x7fd530f17e20
+next block
+bin start bid: 514
+bin complete bid: 514
+0x7fd530f17e90
+0x7fd530f17ef0
+next block
+bin start bid: 529
+bin complete bid: 529
+0x7fd530f17f50
+0x7fd530f17fe0
+next block
+bin start bid: 572
+bin complete bid: 572
+0x7fd530f18050
+0x7fd530f18100
+0x7fd530f18180
+next block
+bin start bid: 590
+bin complete bid: 590
+0x7fd530f18200
+0x7fd530f18260
+next block
+bin start bid: 598
+bin complete bid: 598
+0x7fd530f182c0
+0x7fd530f18320
+next block
+bin start bid: 648
+bin complete bid: 648
+0x7fd530f18390
+0x7fd530f18440
+0x7fd530f184c0
+next block
+bin start bid: 670
+bin complete bid: 670
+0x7fd530f18540
+0x7fd530f185c0
+0x7fd530f18640
+next block
+bin start bid: 679
+bin complete bid: 679
+0x7fd530f186c0
+0x7fd530f18720
+next block
+bin start bid: 681
+bin complete bid: 681
+0x7fd530f18780
+0x7fd530f187e0
+next block
+bin start bid: 698
+bin complete bid: 698
+0x7fd530f18850
+0x7fd530f18900
+0x7fd530f18980
+next block
+bin start bid: 723
+bin complete bid: 723
+0x7fd530f18a00
+0x7fd530f18a80
+0x7fd530f18b10
+0x7fd530f18bf0
+0x7fd530f18cf0
+0x7fd530f18c80
+0x7fd530f18e30
+0x7fd530f18f10
+0x7fd530f18f70
+0x7fd530f19000
+next block
+bin start bid: 762
+bin complete bid: 762
+0x7fd530f19060
+0x7fd530f190c0
+0x7fd530f19120
+next block
+bin start bid: 781
+bin complete bid: 781
+0x7fd530f19180
+0x7fd530f19200
+0x7fd530f19280
+next block
+bin start bid: 787
+bin complete bid: 787
+0x7fd530f19300
+0x7fd530f19360
+0x7fd530f193e0
+0x7fd530f19460
+next block
+bin start bid: 846
+bin complete bid: 846
+0x7fd530f194e0
+0x7fd530f19570
+0x7fd530f195f0
+next block
+bin start bid: 869
+bin complete bid: 869
+0x7fd530f19670
+0x7fd530f196f0
+0x7fd530f19770
+next block
+bin start bid: 899
+bin complete bid: 899
+0x7fd530f197f0
+0x7fd530f19850
+0x7fd530f198e0
+next block
+bin start bid: 909
+bin complete bid: 909
+0x7fd530f19940
+0x7fd530f199a0
+next block
+bin start bid: 1009
+bin complete bid: 1009
+0x7fd530f19a00
+0x7fd530f19a70
+next block
+bin start bid: 1024
+bin complete bid: 1024
+0x7fd530f19ae0
+0x7fd530f19b50
+next block
+bin start bid: 1048
+bin complete bid: 1048
+0x7fd530f19bc0
+0x7fd530f19c70
+0x7fd530f19cf0
+next block
+bin start bid: 1054
+bin complete bid: 1054
+0x7fd530f19d70
+0x7fd530f19dd0
+next block
+bin start bid: 1106
+bin complete bid: 1106
+0x7fd530f19e30
+0x7fd530f19e90
+0x7fd530f19f40
+0x7fd530f19fc0
+next block
+bin start bid: 1119
+bin complete bid: 1119
+0x7fd530f1a0a0
+0x7fd530f1a030
+0x7fd530f1a100
+next block
+bin start bid: 1143
+bin complete bid: 1143
+0x7fd530f1a1b0
+0x7fd530f1a210
+next block
+bin start bid: 1144
+bin complete bid: 1144
+0x7fd530f1a270
+0x7fd530f1a300
+0x7fd530f1a380
+next block
+bin start bid: 1174
+bin complete bid: 1174
+0x7fd530f1a400
+0x7fd530f1a4e0
+0x7fd530f1a540
+0x7fd530f1a5e0
+0x7fd530f1a640
+0x7fd530f1a700
+0x7fd530f1a810
+0x7fd530f1a870
+next block
+bin start bid: 1199
+bin complete bid: 1199
+0x7fd530f1a8d0
+0x7fd530f1a930
+next block
+bin start bid: 1203
+bin complete bid: 1203
+0x7fd530f1a990
+0x7fd530f1aa30
+0x7fd530f1aad0
+0x7fd530f1ab30
+next block
+bin start bid: 1228
+bin complete bid: 1228
+0x7fd530f1abd0
+0x7fd530f1ac70
+0x7fd530f1ad10
+0x7fd530f1adb0
+0x7fd530f1ae50
+next block
+bin start bid: 1241
+bin complete bid: 1241
+0x7fd530f1aef0
+0x7fd530f1af80
+next block
+bin start bid: 1255
+bin complete bid: 1255
+0x7fd530f1afe0
+0x7fd530f1b040
+next block
+bin start bid: 1283
+bin complete bid: 1283
+0x7fd530f1b0a0
+0x7fd530f1b100
+next block
+bin start bid: 1424
+bin complete bid: 1424
+0x7fd530f1b160
+0x7fd530f1b1c0
+0x7fd530f1b240
+next block
+bin start bid: 1428
+bin complete bid: 1428
+0x7fd530f1b2c0
+0x7fd530f1b340
+0x7fd530f1b3c0
+next block
+bin start bid: 1483
+bin complete bid: 1483
+0x7fd530f1b440
+0x7fd530f1b4e0
+0x7fd530f1b580
+0x7fd530f1b620
+next block
+bin start bid: 1492
+bin complete bid: 1492
+0x7fd530f1b6c0
+0x7fd530f1b750
+next block
+bin start bid: 1507
+bin complete bid: 1507
+0x7fd530f1b7b0
+0x7fd530f1b810
+0x7fd530f1b870
+next block
+13527
+bin start bid: 1532
+bin complete bid: 1532
+0x7fd530f1b8d0
+0x7fd530f1b990
+Invalid memory access of location 0x100001288 rip=0x10104e882
