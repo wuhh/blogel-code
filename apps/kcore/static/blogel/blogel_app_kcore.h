@@ -82,8 +82,6 @@ public:
             }
             vote_to_halt();
         }
-
-        //if(step_num() == 20) forceTerminate();
     }
 };
 
@@ -257,13 +255,15 @@ public:
                     vector<triplet>& out_edges = v->value().out_edges;
                     for(int j = 0; j < out_edges.size(); j ++)
                     {
-                        intpair msg(v->id, v->phi);
-                        v->send_message(out_edges[j].vid, out_edges[j].wid, msg);
+                        if(v->phi < psi[out_edges[j].vid])
+                        {
+                            intpair msg(v->id, v->phi);
+                            v->send_message(out_edges[j].vid, out_edges[j].wid, msg);
+                        }
                     }
                 }
             }
         }
-        //if(step_num() == 20) forceTerminate();
         vote_to_halt();
     }
 };
