@@ -56,10 +56,12 @@ public:
             }
             for(int i = 0 ;i < out_edges.size(); i ++)
             {
-                intpair msg(id, degree);
-                send_message(out_edges[i].vid, out_edges[i].wid, msg);
+                //intpair msg(id, degree);
+                //send_message(out_edges[i].vid, out_edges[i].wid, msg);
+                psi[ out_edges[i].vid ] = inf;
             }
         }
+        /*
         else if(step_num() == 2)
         {
             for(int i = 0; i < messages.size(); i ++)
@@ -67,6 +69,7 @@ public:
                 psi[ messages[i].v1 ] = messages[i].v2;
             }
         }
+        */
         else
         {
             // update psi based on messages received.
@@ -232,38 +235,38 @@ public:
                 Bplus.push_back(*it);
             }
         }
-        else if(step_num() > 1)
+        //else if(step_num() > 1)
+        //{
+        // call algo5 binsort
+        for(int i = begin; i < begin + size; i ++)
         {
-            // call algo5 binsort
-            for(int i = begin; i < begin + size; i ++)
+            kcoreVertex* v = vertexes[i];
+            vector<triplet>& in_edges = v->value().in_edges;
+            vector<triplet>& out_edges = v->value().out_edges;
+            v->changed = false;
+            v->deleted = false;
+            v->degree = in_edges.size() + out_edges.size();
+        }
+
+        binsort(vertexes);
+        // send msgs
+        for(int i = begin; i < begin + size; i ++)
+        {
+            kcoreVertex* v = vertexes[i];
+            if(v->changed)
             {
-                kcoreVertex* v = vertexes[i];
-                vector<triplet>& in_edges = v->value().in_edges;
                 vector<triplet>& out_edges = v->value().out_edges;
-                v->changed = false;
-                v->deleted = false;
-                v->degree = in_edges.size() + out_edges.size();
-            }
-            
-            binsort(vertexes);
-            // send msgs
-            for(int i = begin; i < begin + size; i ++)
-            {
-                kcoreVertex* v = vertexes[i];
-                if(v->changed)
+                for(int j = 0; j < out_edges.size(); j ++)
                 {
-                    vector<triplet>& out_edges = v->value().out_edges;
-                    for(int j = 0; j < out_edges.size(); j ++)
+                    if(v->phi < psi[out_edges[j].vid])
                     {
-                        if(v->phi < psi[out_edges[j].vid])
-                        {
-                            intpair msg(v->id, v->phi);
-                            v->send_message(out_edges[j].vid, out_edges[j].wid, msg);
-                        }
+                        intpair msg(v->id, v->phi);
+                        v->send_message(out_edges[j].vid, out_edges[j].wid, msg);
                     }
                 }
             }
         }
+        //}
         vote_to_halt();
     }
 };
