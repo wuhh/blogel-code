@@ -148,11 +148,9 @@ public:
                     list<int>::iterator pt = pos[idx - begin];
 
                     //move to another bin
-                    cout << "#####To remove v" << v->id << " from bin " << v->degree << endl; 
                     bin[ v->degree  ].erase(pt);
                     v->degree --;
                     // erase
-                    cout << "#####To add v" << v->id << " to bin " << v->degree << endl;
                     bin[ v->degree ].push_back(idx);
                     pos[ idx - begin ] = --bin[ v->degree ].end();
                 }
@@ -189,7 +187,6 @@ public:
                     u->degree --;
                     // erase
                     bin[ u->degree ].push_back(uidx);
-                    cout << "~~~~~~To add v" << u->id << " to bin " << u->degree << endl;
                     pos[ uidx - begin ] = --bin[ u->degree ].end();
                 }
             }
@@ -235,15 +232,6 @@ public:
 
             for(hash_map<int, vector<int>* >::iterator it = extend.begin(); it != extend.end(); it ++)
             {
-                /*
-                //cout << "~~~~~~~: " << it->first << endl;
-                vector<int> vec = *(it->second);
-                for(int i = 0 ;i < vec.size(); i ++)
-                {
-                //cout << vertexes[ vec[i]  ]->id << " ";
-                }
-                //cout << endl;
-                 */
                 Bplus.push_back(*it);
             }
         }
