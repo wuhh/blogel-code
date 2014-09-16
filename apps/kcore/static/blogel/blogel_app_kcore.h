@@ -43,14 +43,11 @@ public:
     bool deleted;
     virtual void compute(MessageContainer& messages)
     {
-        changed = false; // changed = false  at the beginning of each superstep
-
         vector<triplet>& in_edges = value().in_edges;
         vector<triplet>& out_edges = value().out_edges;
-        degree = in_edges.size() + out_edges.size();
-        deleted = false;
         if(step_num() == 1)
         {
+            degree = in_edges.size() + out_edges.size();
             phi = degree;
             if(degree == 0)
             {
@@ -85,6 +82,8 @@ public:
             }
             vote_to_halt();
         }
+
+        //if(step_num() == 20) forceTerminate();
     }
 };
 
@@ -238,7 +237,16 @@ public:
         else if(step_num() > 1)
         {
             // call algo5 binsort
-
+            for(int i = begin; i < begin + size; i ++)
+            {
+                kcoreVertex* v = vertexes[i];
+                vector<triplet>& in_edges = v->value().in_edges;
+                vector<triplet>& out_edges = v->value().out_edges;
+                v->changed = false;
+                v->deleted = false;
+                v->degree = in_edges.size() + out_edges.size();
+            }
+            
             binsort(vertexes);
             // send msgs
             for(int i = begin; i < begin + size; i ++)
@@ -255,6 +263,7 @@ public:
                 }
             }
         }
+        //if(step_num() == 20) forceTerminate();
         vote_to_halt();
     }
 };
