@@ -49,6 +49,7 @@ class kcoreVertex : public BVertex<VertexID, kcoreValue, intpair> {
             {
                 degree = in_edges.size() + out_edges.size();
                 phi = degree;
+                changed = false;
                 if(degree == 0)
                 {
                     vote_to_halt();
@@ -64,7 +65,7 @@ class kcoreVertex : public BVertex<VertexID, kcoreValue, intpair> {
             else
             {
                 // update psi based on messages received.
-
+                changed = true;
                 for(int i = 0; i < messages.size(); i ++)
                 {
                     int u = messages[i].v1;
@@ -199,31 +200,41 @@ class kcoreBlock : public Block<char, kcoreVertex, intpair> {
         }
         int subfunc(kcoreVertex* v, VertexContainer& vertexes)
         {
+            //cout << "subfunc" << endl;
             vector<int> cd(v->phi + 2 , 0);
             vector<triplet>& in_edges = v->value().in_edges;
             vector<triplet>& out_edges = v->value().out_edges;
-
+            //cout << "###";
             for(int i = 0; i < in_edges.size(); i ++)
             {
                 kcoreVertex* u = vertexes[ in_edges[i].wid ];
                 cd[  min(v->phi, u->phi) ] ++;
-            }
 
+                //cout << u->id << " " << u->phi << "#";
+            }
+            //cout << endl;
+            //cout << "!!!!";
             for(int i = 0; i < out_edges.size(); i ++)
             {
+                //cout <<  out_edges[i].vid << " " <<   psi[ out_edges[i].vid ]  << "#";
+                
+                // ????????????????
+                /*
                 if( psi[ out_edges[i].vid ] > v->phi )
                 {
                     psi[ out_edges[i].vid ] = v->phi;
                 }
-
-                cd[ v->phi ] ++;
+                */
+                cd[ min(psi[ out_edges[i].vid], v->phi) ] ++;
             }
+            //cout << endl;
 
             for(int i = v->phi; i >= 1 ; i --)
             {
                 cd[i] += cd[i + 1];
                 if(cd[i] >= i)
                 {
+                    //cout << "@@@@" << v->id << " " << i << endl;
                     return i;
                 }
             }
@@ -292,27 +303,31 @@ class kcoreBlock : public Block<char, kcoreVertex, intpair> {
                 for(int i = begin; i < begin + size; i ++)
                 {
                     kcoreVertex* v = vertexes[i];
-                    vector<triplet>& in_edges = v->value().in_edges;
-                    vector<triplet>& out_edges = v->value().out_edges;
-                    
-                    int x = subfunc(v, vertexes);
-
-                    if(x < v->phi)
+                    //cout << v->id << " " << v->phi << endl;
+                    if(v->changed)
                     {
-                        v->phi = x;
-                        for(int j = 0; j < in_edges.size(); j ++)
+                        v->changed = false;
+                        vector<triplet>& in_edges = v->value().in_edges;
+                        vector<triplet>& out_edges = v->value().out_edges;
+                        int x = subfunc(v, vertexes);
+                        //cout << "~~~~" << v->id << " " << v->phi <<" " << x <<  endl;
+                        if(x < v->phi)
                         {
-                            kcoreVertex* u = vertexes[ in_edges[j].wid ];
-                            if(v->phi < u->phi)
+                            v->phi = x;
+                            for(int j = 0; j < in_edges.size(); j ++)
                             {
-                                u->activate(); //??????????
+                                kcoreVertex* u = vertexes[ in_edges[j].wid ];
+                                if(v->phi < u->phi)
+                                {
+                                    u->activate(); //??????????
+                                }
                             }
-                        }
-                        for(int j = 0; j < out_edges.size(); j ++)
-                        {
-                            if(v->phi < psi[ out_edges[i].vid ] )
+                            for(int j = 0; j < out_edges.size(); j ++)
                             {
-                                this->send_message(out_edges[i].vid, out_edges[i].wid, intpair(v->id, v->phi));
+                                if(v->phi < psi[ out_edges[j].vid ] )
+                                {
+                                    send_message(out_edges[j].vid, out_edges[j].wid, intpair(v->id, v->phi));
+                                }
                             }
                         }
                     }
