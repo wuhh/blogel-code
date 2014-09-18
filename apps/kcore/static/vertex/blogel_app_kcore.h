@@ -84,12 +84,7 @@ public:
         for(int i = 0 ; i < in_edges.size(); i ++)
         {
             kcoreVertex* u = vertexes[ in_edges[i].wid ];
-            if(v->phi < u->phi)
-            {
-                u->phi = v->phi;
-                u->activate();
-            }
-            cd[ u->phi ] ++;
+            cd[ min(u->phi, v->phi) ] ++ ;
         }
         for(int i = 0 ;i < out_edges.size(); i ++)
         {
@@ -123,6 +118,11 @@ public:
                 if(x < v->phi)
                 {
                     v->phi = x;
+                    for(int j = 0 ; j < in_edges.size(); j ++)
+                    {
+                        kcoreVertex* u = vertexes[ in_edges[j].wid ];
+                        u->activate();
+                    }
                     for(int j = 0 ; j < out_edges.size(); j ++)
                     {
                         if(v->phi < v->P[ out_edges[j].vid  ])
