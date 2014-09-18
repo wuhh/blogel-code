@@ -6,6 +6,8 @@
 using namespace std;
 
 //below are used by blogel
+int active_vcount;
+int active_bcount;
 
 //========== Voronoi cell partitioning parameters ===========
 double global_sampling_rate = 0.0001;

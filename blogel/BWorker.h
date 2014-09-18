@@ -40,11 +40,9 @@ public:
     //===================================
 
     VertexContainer vertexes;
-    int active_vcount;
     VMessageBufT* vmessage_buffer;
     //---------------------
     BlockContainer blocks;
-    int active_bcount;
     BMessageBufT* bmessage_buffer;
     //---------------------
     enum DUMPMODE {
