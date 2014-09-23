@@ -74,8 +74,8 @@ class kcoreVertex : public BVertex<VertexID, kcoreValue, intpair> {
                         psi[u] = k;
                     }
                 }
+                vote_to_halt();
             }
-            vote_to_halt();
         }
 };
 

@@ -44,9 +44,9 @@ public:
     {
         vector<triplet>& in_edges = value().in_edges;
         vector<triplet>& out_edges = value().out_edges;
-        changed = true;
         if(step_num() == 1)
         {
+            changed = false;
             phi = in_edges.size() + out_edges.size();
             for(int i = 0 ; i < out_edges.size(); i ++)
             {
@@ -60,6 +60,7 @@ public:
         }
         else
         {
+            changed = true;
             for(int i = 0 ; i < messages.size(); i ++)
             {
                 int u = messages[i].v1;
@@ -67,8 +68,8 @@ public:
                 if(P[u] > k)
                     P[u] = k;
             }
+            vote_to_halt();
         }
-        vote_to_halt();
     }
 };
 
