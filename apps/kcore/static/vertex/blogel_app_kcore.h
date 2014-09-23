@@ -56,6 +56,7 @@ public:
             if(phi == 0)
             {
                 changed = false;
+                vote_to_halt();
             }
         }
         else
