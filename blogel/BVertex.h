@@ -66,8 +66,11 @@ public:
     }
     inline void activate()
     {
-        active_vcount ++;
-        active = true;
+        if(active == false)
+        {
+            active_vcount ++;
+            active = true;
+        }
     }
     inline void vote_to_halt()
     {

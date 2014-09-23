@@ -45,8 +45,11 @@ public:
     }
     inline void activate()
     {
-        active_bcount ++;
-        active = true;
+        if(active == false)
+        {
+            active_bcount ++;
+            active = true;
+        }
     }
     inline void vote_to_halt()
     {

@@ -92,6 +92,7 @@ public:
             {
                 v->P[ out_edges[i].vid ] = v->phi;
             }
+           
             cd[ v->P[ out_edges[i].vid ] ] ++ ;
         }
         for(int i = v->phi; i >= 1; i --)
@@ -105,33 +106,39 @@ public:
     }
     virtual void compute(MessageContainer& messages, VertexContainer& vertexes)
     {
-        for(int i = begin; i < begin + size; i ++)
+        if(step_num() > 1)
         {
-            kcoreVertex* v = vertexes[i];
-            vector<triplet>& in_edges = v->value().in_edges;
-            vector<triplet>& out_edges = v->value().out_edges;
-
-            if(v->changed)
+            for(int i = begin; i < begin + size; i ++)
             {
-                v->changed = false;
-                int x = subfunc(v, vertexes);
-                if(x < v->phi)
+                kcoreVertex* v = vertexes[i];
+                vector<triplet>& in_edges = v->value().in_edges;
+                vector<triplet>& out_edges = v->value().out_edges;
+                if(v->changed)
                 {
-                    v->phi = x;
-                    for(int j = 0 ; j < in_edges.size(); j ++)
+                    v->changed = false;
+                    int x = subfunc(v, vertexes);
+                    if(x < v->phi)
                     {
-                        kcoreVertex* u = vertexes[ in_edges[j].wid ];
-                        u->activate();
-                    }
-                    for(int j = 0 ; j < out_edges.size(); j ++)
-                    {
-                        if(v->phi < v->P[ out_edges[j].vid  ])
+                        v->phi = x;
+                        for(int j = 0 ; j < in_edges.size(); j ++)
                         {
-                            send_message(out_edges[j].vid, out_edges[j].wid, intpair(v->id, v->phi));
+                            kcoreVertex* u = vertexes[ in_edges[j].wid ];
+                            u->activate();
+                        }
+                        for(int j = 0 ; j < out_edges.size(); j ++)
+                        {
+                            if(v->phi < v->P[ out_edges[j].vid  ])
+                            {
+                                v->send_message(out_edges[j].vid, out_edges[j].wid, intpair(v->id, v->phi));
+                            }
                         }
                     }
                 }
             }
+        }
+        for(int i = begin; i < begin + size; i ++)
+        {   
+            kcoreVertex* v = vertexes[i];
         }
         vote_to_halt();
     }

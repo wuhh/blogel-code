@@ -323,7 +323,7 @@ class kcoreBlock : public Block<char, kcoreVertex, intpair> {
                             {
                                 if(v->phi < psi[ out_edges[j].vid ] )
                                 {
-                                    send_message(out_edges[j].vid, out_edges[j].wid, intpair(v->id, v->phi));
+                                    v->send_message(out_edges[j].vid, out_edges[j].wid, intpair(v->id, v->phi));
                                 }
                             }
                         }
