@@ -9,6 +9,8 @@
 #include <vector>
 #include <cassert>
 #include <sstream>
+#include <list>
+
 
 using namespace std;
 const int inf = 1000000000;
@@ -73,8 +75,8 @@ public:
         bool deleted;
         virtual void compute(MessageContainer& messages)
         {
-            vector<triplet>& in_edges = value().in_edges;
-            vector<triplet>& out_edges = value().out_edges;
+            vector<tripletX>& in_edges = value().in_edges;
+            vector<tripletX>& out_edges = value().out_edges;
             if(step_num() == 1)
             {
                 degree = in_edges.size() + out_edges.size();
@@ -88,7 +90,7 @@ public:
                 {
                     //intpair msg(id, degree);
                     //send_message(out_edges[i].vid, out_edges[i].wid, msg);
-                    psi[ out_edges[i].vid ] = inf;
+                    psi[ out_edges[i].vid.v1 ] = inf;
                 }
             }
             else
@@ -127,7 +129,7 @@ public:
             int maxDeg = 0;
             for(int i = begin; i < begin + size; i ++)
             {
-                kcoreVertex* v = vertexes[i];
+                kcoretVertex* v = vertexes[i];
                 maxDeg = max(maxDeg, v->degree);  
             }
 
@@ -140,7 +142,7 @@ public:
             for(int i = begin; i < begin + size; i ++)
             {
 
-                kcoreVertex* v = vertexes[i];
+                kcoretVertex* v = vertexes[i];
                 bin[ v->degree ].push_back(i); // i is the index, if you want to get the vertex, use vertexes[i]
                 pos[ i - begin ] = --bin[ v->degree ].end();
             }
@@ -165,7 +167,7 @@ public:
                     for(int k = 0; k < adj->size(); k ++)
                     {
                         int idx = (*adj)[k];
-                        kcoreVertex* v = vertexes[idx];
+                        kcoretVertex* v = vertexes[idx];
                         if(v->deleted) continue;
                         // move the vertex to another bin
                         list<int>::iterator pt = pos[idx - begin];
@@ -188,7 +190,7 @@ public:
                     else psi_min = inf;
                 }
                 int idx = bin[i].front();
-                kcoreVertex* v = vertexes[idx];
+                kcoretVertex* v = vertexes[idx];
                 if (v->degree < v->phi)
                 {
                     v->phi = v->degree;
@@ -198,7 +200,7 @@ public:
                 for(int k = 0; k < v->value().in_edges.size(); k ++)
                 {
                     int uidx = v->value().in_edges[k].wid; 
-                    kcoreVertex* u = vertexes[uidx];
+                    kcoretVertex* u = vertexes[uidx];
                     if(u->deleted) continue;
                     if(u->degree > v->degree)
                     {
@@ -229,16 +231,16 @@ public:
                 else d_min = i;
             }
         }
-        int subfunc(kcoreVertex* v, VertexContainer& vertexes)
+        int subfunc(kcoretVertex* v, VertexContainer& vertexes)
         {
             //cout << "subfunc" << endl;
             vector<int> cd(v->phi + 2 , 0);
-            vector<triplet>& in_edges = v->value().in_edges;
-            vector<triplet>& out_edges = v->value().out_edges;
+            vector<tripletX>& in_edges = v->value().in_edges;
+            vector<tripletX>& out_edges = v->value().out_edges;
             //cout << "###";
             for(int i = 0; i < in_edges.size(); i ++)
             {
-                kcoreVertex* u = vertexes[ in_edges[i].wid ];
+                kcoretVertex* u = vertexes[ in_edges[i].wid ];
                 cd[  min(v->phi, u->phi) ] ++;
 
                 //cout << u->id << " " << u->phi << "#";
@@ -256,7 +258,7 @@ public:
                     psi[ out_edges[i].vid ] = v->phi;
                 }
                 */
-                cd[ min(psi[ out_edges[i].vid], v->phi) ] ++;
+                cd[ min(psi[ out_edges[i].vid.v1], v->phi) ] ++;
             }
             //cout << endl;
 
@@ -281,11 +283,11 @@ public:
 
                 for(int i = begin; i < begin + size; i ++)
                 {
-                    kcoreVertex* v = vertexes[i];
-                    vector<triplet>& out_edges = v->value().out_edges;
+                    kcoretVertex* v = vertexes[i];
+                    vector<tripletX>& out_edges = v->value().out_edges;
                     for(int j = 0; j < out_edges.size(); j ++)
                     {
-                        int vid = out_edges[j].vid;
+                        int vid = out_edges[j].vid.v1;
 
                         if(extend.count(vid) == 0)
                         {
@@ -302,9 +304,9 @@ public:
                 // call algo5 binsort
                 for(int i = begin; i < begin + size; i ++)
                 {
-                    kcoreVertex* v = vertexes[i];
-                    vector<triplet>& in_edges = v->value().in_edges;
-                    vector<triplet>& out_edges = v->value().out_edges;
+                    kcoretVertex* v = vertexes[i];
+                    vector<tripletX>& in_edges = v->value().in_edges;
+                    vector<tripletX>& out_edges = v->value().out_edges;
                     v->changed = false;
                     v->deleted = false;
                     v->degree = in_edges.size() + out_edges.size();
@@ -314,16 +316,16 @@ public:
                 // send msgs
                 for(int i = begin; i < begin + size; i ++)
                 {
-                    kcoreVertex* v = vertexes[i];
+                    kcoretVertex* v = vertexes[i];
                     //if(v->changed)
                     {
-                        vector<triplet>& out_edges = v->value().out_edges;
+                        vector<tripletX>& out_edges = v->value().out_edges;
                         for(int j = 0; j < out_edges.size(); j ++)
                         {
-                            if(v->phi < psi[out_edges[j].vid])
+                            if(v->phi < psi[out_edges[j].vid.v1])
                             {
                                 intpair msg(v->id, v->phi);
-                                v->send_message(out_edges[j].vid, out_edges[j].wid, msg);
+                                v->send_message(out_edges[j].vid.v1, out_edges[j].wid, msg);
                             }
                         }
                     }
@@ -333,13 +335,13 @@ public:
             {
                 for(int i = begin; i < begin + size; i ++)
                 {
-                    kcoreVertex* v = vertexes[i];
+                    kcoretVertex* v = vertexes[i];
                     //cout << v->id << " " << v->phi << endl;
                     if(v->changed)
                     {
                         v->changed = false;
-                        vector<triplet>& in_edges = v->value().in_edges;
-                        vector<triplet>& out_edges = v->value().out_edges;
+                        vector<tripletX>& in_edges = v->value().in_edges;
+                        vector<tripletX>& out_edges = v->value().out_edges;
                         int x = subfunc(v, vertexes);
                         //cout << "~~~~" << v->id << " " << v->phi <<" " << x <<  endl;
                         if(x < v->phi)
@@ -347,14 +349,14 @@ public:
                             v->phi = x;
                             for(int j = 0; j < in_edges.size(); j ++)
                             {
-                                kcoreVertex* u = vertexes[ in_edges[j].wid ];
+                                kcoretVertex* u = vertexes[ in_edges[j].wid ];
                                 u->activate(); //??????????
                             }
                             for(int j = 0; j < out_edges.size(); j ++)
                             {
-                                if(v->phi < psi[ out_edges[j].vid ] )
+                                if(v->phi < psi[ out_edges[j].vid.v1 ] )
                                 {
-                                    v->send_message(out_edges[j].vid, out_edges[j].wid, intpair(v->id, v->phi));
+                                    v->send_message(out_edges[j].vid.v1, out_edges[j].wid, intpair(v->id, v->phi));
                                 }
                             }
                         }
@@ -425,11 +427,11 @@ public:
                 vector<tripletX>& out_edges = vertex->value().out_edges;
 
                 for (int j = 0; j < in_edges.size(); j++) {
-                    in_edges[j].wid = map[in_edges[j].vid]; //workerID->array index
+                    in_edges[j].wid = map[in_edges[j].vid.v1]; //workerID->array index
                 }
 
                 for (int j = 0; j < out_edges.size(); j++) {
-                    psi[ out_edges[j].vid ] = inf;
+                    psi[ out_edges[j].vid.v1 ] = inf;
                 }
             }
         }
@@ -441,7 +443,7 @@ public:
     virtual kcoretVertex* toVertex(char* line)
     {
 
-        kcoreT2Vertex* v = new kcoreT2Vertex;
+        kcoretVertex* v = new kcoretVertex;
         istringstream ssin(line);
         ssin >> v->id;
         ssin >> v->bid;
@@ -462,7 +464,7 @@ public:
                 ssin >> t;
             }
             
-            if(bid == v->bid)
+            if(trip.bid == v->bid)
             {
                 in_edges.push_back(trip);
             }
@@ -470,8 +472,6 @@ public:
             {
                 out_edges.push_back(trip);
             }
-            
-            edges.push_back(trip);
         }
         return v;
     }
@@ -480,15 +480,15 @@ public:
     {
         sprintf(buf, "%d\t", v->id);
         writer.write(buf);
-        for (int i = 0; i < v->value().phis.size(); i++)
+        for (int i = 0; i < v->phis.size(); i++)
         {
-            if (v->value().phis[i].v1 != 0)
+            if (v->phis[i].v1 != 0)
             {
                 sprintf(buf, " ");
                 writer.write(buf);
                 
             }
-            sprintf(buf, "%d %d", v->value().phis[i].v1, v->value().phis[i].v2);
+            sprintf(buf, "%d %d", v->phis[i].v1, v->phis[i].v2);
             writer.write(buf);
         }
         writer.write("\n");
