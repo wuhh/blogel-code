@@ -90,24 +90,20 @@ public:
         if(step_num() == 1)
         {
             // add last round result
-            if(phase_num() > 1)
+            degree = in_edges.size() + out_edges.size();
+            
+            if(phase_num() > 1 && degree > 0)
                 add_phi();
             // clear edges
             while(in_edges.size() && in_edges.back().vid.v2 == CURRENT_PI)
                 in_edges.pop_back();
             while(out_edges.size() && out_edges.back().vid.v2 == CURRENT_PI)
                 out_edges.pop_back();
-            
             // for agg
                 
             degree = in_edges.size() + out_edges.size();
             phi = degree;
             
-           
-            if(id == 774551)
-            {
-                cout << id << " " <<   degree << endl;
-            }
             if(phase_num() == 1) // initialize once
             {
                 for(int i = 0 ;i < out_edges.size(); i ++)
@@ -123,7 +119,14 @@ public:
         {   
            
             if(step_num() == 2)
+            {
                 CURRENT_PI = *((int*)getAgg());
+                if(CURRENT_PI == inf)
+                {
+                    forceTerminate();
+                    return;
+                }
+            }
         
             changed = false;
             
@@ -139,12 +142,6 @@ public:
                 }
             }
 
-              if(id == 774551)
-            {
-                cout << id << " " <<   degree << " " << messages.size() << " " << changed<< endl;
-            }
-           
-
             vote_to_halt();
         }
     }
@@ -157,7 +154,7 @@ int cmpPsi(const pair<int, vector<int>* >& p1, const pair<int, vector<int>* >& p
 
 int cmptripletX(const tripletX& t1, const tripletX& t2) 
 {
-    return t1.vid.v2 < t2.vid.v2;
+    return t1.vid.v2 > t2.vid.v2;
 }
 
 
@@ -384,11 +381,6 @@ public:
                     kcoretVertex* v = vertexes[i];
                     //cout << v->id << " " << v->phi << endl;
                     
-                    if(v->id == 774451 )
-                    {
-                        cout << v->changed << " " << v->degree << endl;
-                    }
-                    
                     if(v->changed)
                     {
                         v->changed = false;
@@ -456,6 +448,8 @@ public:
 
     virtual int* finishFinal()
     {
+        if(step_num() == 1)
+            cout << "@@@@@@@@@@@@@@ " << pi << endl;
         return &pi;
     }
 };
@@ -538,17 +532,14 @@ class kcoretBlockWorker : public BWorker<kcoretBlock, kcoretAgg>
     virtual void toline(kcoretBlock* b, kcoretVertex* v, BufferedWriter& writer)
     {
         //add the result from last round
-        v->add_phi();
-
         sprintf(buf, "%d\t", v->id);
         writer.write(buf);
         for (int i = 0; i < v->phis.size(); i++)
         {
-            if (v->phis[i].v1 != 0)
+            if (i != 0)
             {
                 sprintf(buf, " ");
                 writer.write(buf);
-
             }
             sprintf(buf, "%d %d", v->phis[i].v1, v->phis[i].v2);
             writer.write(buf);
