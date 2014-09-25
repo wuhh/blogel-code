@@ -1,0 +1,623 @@
+Load Time : 11.117743 seconds
+* #{blocks} = 46023, #{vertices} = 1103412
+Splitting in/out-block edges ...
+In/out-block edges split
+################ Phase 1 ################
+@@@@@@@@@@@@@@ 1
+Superstep 1 done. Time elapsed: 4.26364 seconds
+#vmsgs: 3520288, #bmsgs: 0
+Superstep 2 done. Time elapsed: 1.7107 seconds
+#vmsgs: 1304208, #bmsgs: 0
+Superstep 3 done. Time elapsed: 1.25938 seconds
+#vmsgs: 758629, #bmsgs: 0
+Superstep 4 done. Time elapsed: 1.0625 seconds
+#vmsgs: 441470, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.836426 seconds
+#vmsgs: 258107, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.657915 seconds
+#vmsgs: 150623, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.523155 seconds
+#vmsgs: 90105, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.422802 seconds
+#vmsgs: 55985, #bmsgs: 0
+Superstep 9 done. Time elapsed: 0.344042 seconds
+#vmsgs: 35439, #bmsgs: 0
+Superstep 10 done. Time elapsed: 0.278204 seconds
+#vmsgs: 22363, #bmsgs: 0
+Superstep 11 done. Time elapsed: 0.229276 seconds
+#vmsgs: 15214, #bmsgs: 0
+Superstep 12 done. Time elapsed: 0.194762 seconds
+#vmsgs: 10733, #bmsgs: 0
+Superstep 13 done. Time elapsed: 0.166837 seconds
+#vmsgs: 7791, #bmsgs: 0
+Superstep 14 done. Time elapsed: 0.14781 seconds
+#vmsgs: 6014, #bmsgs: 0
+Superstep 15 done. Time elapsed: 0.130152 seconds
+#vmsgs: 4770, #bmsgs: 0
+Superstep 16 done. Time elapsed: 0.116705 seconds
+#vmsgs: 3165, #bmsgs: 0
+Superstep 17 done. Time elapsed: 0.101002 seconds
+#vmsgs: 2598, #bmsgs: 0
+Superstep 18 done. Time elapsed: 0.094594 seconds
+#vmsgs: 1908, #bmsgs: 0
+Superstep 19 done. Time elapsed: 0.085058 seconds
+#vmsgs: 1444, #bmsgs: 0
+Superstep 20 done. Time elapsed: 0.0795929 seconds
+#vmsgs: 1205, #bmsgs: 0
+Superstep 21 done. Time elapsed: 0.0743301 seconds
+#vmsgs: 815, #bmsgs: 0
+Superstep 22 done. Time elapsed: 0.0686612 seconds
+#vmsgs: 554, #bmsgs: 0
+Superstep 23 done. Time elapsed: 0.06373 seconds
+#vmsgs: 460, #bmsgs: 0
+Superstep 24 done. Time elapsed: 0.061728 seconds
+#vmsgs: 441, #bmsgs: 0
+Superstep 25 done. Time elapsed: 0.0602059 seconds
+#vmsgs: 430, #bmsgs: 0
+Superstep 26 done. Time elapsed: 0.060725 seconds
+#vmsgs: 509, #bmsgs: 0
+Superstep 27 done. Time elapsed: 0.0620871 seconds
+#vmsgs: 544, #bmsgs: 0
+Superstep 28 done. Time elapsed: 0.0642369 seconds
+#vmsgs: 491, #bmsgs: 0
+Superstep 29 done. Time elapsed: 0.0627999 seconds
+#vmsgs: 418, #bmsgs: 0
+Superstep 30 done. Time elapsed: 0.0602479 seconds
+#vmsgs: 357, #bmsgs: 0
+Superstep 31 done. Time elapsed: 0.0573962 seconds
+#vmsgs: 298, #bmsgs: 0
+Superstep 32 done. Time elapsed: 0.055537 seconds
+#vmsgs: 130, #bmsgs: 0
+Superstep 33 done. Time elapsed: 0.0505779 seconds
+#vmsgs: 96, #bmsgs: 0
+Superstep 34 done. Time elapsed: 0.0447791 seconds
+#vmsgs: 10, #bmsgs: 0
+Superstep 35 done. Time elapsed: 0.0339601 seconds
+#vmsgs: 17, #bmsgs: 0
+Superstep 36 done. Time elapsed: 0.0331888 seconds
+#vmsgs: 10, #bmsgs: 0
+Superstep 37 done. Time elapsed: 0.0255029 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 38 done. Time elapsed: 0.023464 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 2 ################
+@@@@@@@@@@@@@@ 2
+Superstep 1 done. Time elapsed: 2.45583 seconds
+#vmsgs: 585361, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.529873 seconds
+#vmsgs: 290438, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.330994 seconds
+#vmsgs: 141376, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.252898 seconds
+#vmsgs: 70286, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.190171 seconds
+#vmsgs: 35822, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.147919 seconds
+#vmsgs: 19467, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.120262 seconds
+#vmsgs: 11392, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.10047 seconds
+#vmsgs: 6852, #bmsgs: 0
+Superstep 9 done. Time elapsed: 0.0872929 seconds
+#vmsgs: 4483, #bmsgs: 0
+Superstep 10 done. Time elapsed: 0.077769 seconds
+#vmsgs: 2916, #bmsgs: 0
+Superstep 11 done. Time elapsed: 0.070714 seconds
+#vmsgs: 2026, #bmsgs: 0
+Superstep 12 done. Time elapsed: 0.0649619 seconds
+#vmsgs: 1486, #bmsgs: 0
+Superstep 13 done. Time elapsed: 0.061228 seconds
+#vmsgs: 1058, #bmsgs: 0
+Superstep 14 done. Time elapsed: 0.0577919 seconds
+#vmsgs: 821, #bmsgs: 0
+Superstep 15 done. Time elapsed: 0.0551441 seconds
+#vmsgs: 615, #bmsgs: 0
+Superstep 16 done. Time elapsed: 0.0531981 seconds
+#vmsgs: 392, #bmsgs: 0
+Superstep 17 done. Time elapsed: 0.050087 seconds
+#vmsgs: 290, #bmsgs: 0
+Superstep 18 done. Time elapsed: 0.0484509 seconds
+#vmsgs: 201, #bmsgs: 0
+Superstep 19 done. Time elapsed: 0.0478511 seconds
+#vmsgs: 188, #bmsgs: 0
+Superstep 20 done. Time elapsed: 0.045084 seconds
+#vmsgs: 146, #bmsgs: 0
+Superstep 21 done. Time elapsed: 0.044554 seconds
+#vmsgs: 100, #bmsgs: 0
+Superstep 22 done. Time elapsed: 0.043694 seconds
+#vmsgs: 66, #bmsgs: 0
+Superstep 23 done. Time elapsed: 0.040458 seconds
+#vmsgs: 91, #bmsgs: 0
+Superstep 24 done. Time elapsed: 0.0421309 seconds
+#vmsgs: 54, #bmsgs: 0
+Superstep 25 done. Time elapsed: 0.0394411 seconds
+#vmsgs: 45, #bmsgs: 0
+Superstep 26 done. Time elapsed: 0.0385041 seconds
+#vmsgs: 36, #bmsgs: 0
+Superstep 27 done. Time elapsed: 0.0384719 seconds
+#vmsgs: 28, #bmsgs: 0
+Superstep 28 done. Time elapsed: 0.037231 seconds
+#vmsgs: 47, #bmsgs: 0
+Superstep 29 done. Time elapsed: 0.0397949 seconds
+#vmsgs: 75, #bmsgs: 0
+Superstep 30 done. Time elapsed: 0.0395529 seconds
+#vmsgs: 74, #bmsgs: 0
+Superstep 31 done. Time elapsed: 0.0382841 seconds
+#vmsgs: 29, #bmsgs: 0
+Superstep 32 done. Time elapsed: 0.037245 seconds
+#vmsgs: 18, #bmsgs: 0
+Superstep 33 done. Time elapsed: 0.032217 seconds
+#vmsgs: 18, #bmsgs: 0
+Superstep 34 done. Time elapsed: 0.0337338 seconds
+#vmsgs: 8, #bmsgs: 0
+Superstep 35 done. Time elapsed: 0.0309501 seconds
+#vmsgs: 18, #bmsgs: 0
+Superstep 36 done. Time elapsed: 0.0330281 seconds
+#vmsgs: 9, #bmsgs: 0
+Superstep 37 done. Time elapsed: 0.0300519 seconds
+#vmsgs: 6, #bmsgs: 0
+Superstep 38 done. Time elapsed: 0.027921 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 39 done. Time elapsed: 0.02356 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 3 ################
+@@@@@@@@@@@@@@ 3
+Superstep 1 done. Time elapsed: 1.33621 seconds
+#vmsgs: 202972, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.256084 seconds
+#vmsgs: 82111, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.149413 seconds
+#vmsgs: 33795, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.110611 seconds
+#vmsgs: 14351, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.086 seconds
+#vmsgs: 6643, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.0713019 seconds
+#vmsgs: 3500, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.0634708 seconds
+#vmsgs: 1803, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.0572181 seconds
+#vmsgs: 1134, #bmsgs: 0
+Superstep 9 done. Time elapsed: 0.0542619 seconds
+#vmsgs: 740, #bmsgs: 0
+Superstep 10 done. Time elapsed: 0.0517769 seconds
+#vmsgs: 536, #bmsgs: 0
+Superstep 11 done. Time elapsed: 0.0503621 seconds
+#vmsgs: 340, #bmsgs: 0
+Superstep 12 done. Time elapsed: 0.0480609 seconds
+#vmsgs: 291, #bmsgs: 0
+Superstep 13 done. Time elapsed: 0.0474401 seconds
+#vmsgs: 162, #bmsgs: 0
+Superstep 14 done. Time elapsed: 0.0448201 seconds
+#vmsgs: 136, #bmsgs: 0
+Superstep 15 done. Time elapsed: 0.043664 seconds
+#vmsgs: 99, #bmsgs: 0
+Superstep 16 done. Time elapsed: 0.042635 seconds
+#vmsgs: 71, #bmsgs: 0
+Superstep 17 done. Time elapsed: 0.0399351 seconds
+#vmsgs: 83, #bmsgs: 0
+Superstep 18 done. Time elapsed: 0.040647 seconds
+#vmsgs: 44, #bmsgs: 0
+Superstep 19 done. Time elapsed: 0.039747 seconds
+#vmsgs: 46, #bmsgs: 0
+Superstep 20 done. Time elapsed: 0.0390322 seconds
+#vmsgs: 54, #bmsgs: 0
+Superstep 21 done. Time elapsed: 0.038662 seconds
+#vmsgs: 37, #bmsgs: 0
+Superstep 22 done. Time elapsed: 0.035702 seconds
+#vmsgs: 26, #bmsgs: 0
+Superstep 23 done. Time elapsed: 0.0385549 seconds
+#vmsgs: 19, #bmsgs: 0
+Superstep 24 done. Time elapsed: 0.0354259 seconds
+#vmsgs: 18, #bmsgs: 0
+Superstep 25 done. Time elapsed: 0.034863 seconds
+#vmsgs: 24, #bmsgs: 0
+Superstep 26 done. Time elapsed: 0.036629 seconds
+#vmsgs: 14, #bmsgs: 0
+Superstep 27 done. Time elapsed: 0.0316589 seconds
+#vmsgs: 16, #bmsgs: 0
+Superstep 28 done. Time elapsed: 0.033644 seconds
+#vmsgs: 15, #bmsgs: 0
+Superstep 29 done. Time elapsed: 0.0333021 seconds
+#vmsgs: 8, #bmsgs: 0
+Superstep 30 done. Time elapsed: 0.030725 seconds
+#vmsgs: 9, #bmsgs: 0
+Superstep 31 done. Time elapsed: 0.031692 seconds
+#vmsgs: 5, #bmsgs: 0
+Superstep 32 done. Time elapsed: 0.029232 seconds
+#vmsgs: 4, #bmsgs: 0
+Superstep 33 done. Time elapsed: 0.0277798 seconds
+#vmsgs: 4, #bmsgs: 0
+Superstep 34 done. Time elapsed: 0.02965 seconds
+#vmsgs: 5, #bmsgs: 0
+Superstep 35 done. Time elapsed: 0.0288892 seconds
+#vmsgs: 5, #bmsgs: 0
+Superstep 36 done. Time elapsed: 0.028692 seconds
+#vmsgs: 5, #bmsgs: 0
+Superstep 37 done. Time elapsed: 0.0289471 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 38 done. Time elapsed: 0.0235021 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 4 ################
+@@@@@@@@@@@@@@ 4
+Superstep 1 done. Time elapsed: 1.06657 seconds
+#vmsgs: 87300, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.157081 seconds
+#vmsgs: 24676, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.0880191 seconds
+#vmsgs: 8327, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0684769 seconds
+#vmsgs: 3366, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.058809 seconds
+#vmsgs: 1619, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.053859 seconds
+#vmsgs: 797, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.050112 seconds
+#vmsgs: 439, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.047677 seconds
+#vmsgs: 282, #bmsgs: 0
+Superstep 9 done. Time elapsed: 0.045851 seconds
+#vmsgs: 207, #bmsgs: 0
+Superstep 10 done. Time elapsed: 0.044487 seconds
+#vmsgs: 122, #bmsgs: 0
+Superstep 11 done. Time elapsed: 0.0417399 seconds
+#vmsgs: 83, #bmsgs: 0
+Superstep 12 done. Time elapsed: 0.0409212 seconds
+#vmsgs: 56, #bmsgs: 0
+Superstep 13 done. Time elapsed: 0.0405991 seconds
+#vmsgs: 55, #bmsgs: 0
+Superstep 14 done. Time elapsed: 0.0406241 seconds
+#vmsgs: 38, #bmsgs: 0
+Superstep 15 done. Time elapsed: 0.037272 seconds
+#vmsgs: 21, #bmsgs: 0
+Superstep 16 done. Time elapsed: 0.035043 seconds
+#vmsgs: 31, #bmsgs: 0
+Superstep 17 done. Time elapsed: 0.0346041 seconds
+#vmsgs: 28, #bmsgs: 0
+Superstep 18 done. Time elapsed: 0.036037 seconds
+#vmsgs: 22, #bmsgs: 0
+Superstep 19 done. Time elapsed: 0.0341702 seconds
+#vmsgs: 8, #bmsgs: 0
+Superstep 20 done. Time elapsed: 0.0304329 seconds
+#vmsgs: 10, #bmsgs: 0
+Superstep 21 done. Time elapsed: 0.0307269 seconds
+#vmsgs: 11, #bmsgs: 0
+Superstep 22 done. Time elapsed: 0.032716 seconds
+#vmsgs: 6, #bmsgs: 0
+Superstep 23 done. Time elapsed: 0.031523 seconds
+#vmsgs: 5, #bmsgs: 0
+Superstep 24 done. Time elapsed: 0.0310221 seconds
+#vmsgs: 11, #bmsgs: 0
+Superstep 25 done. Time elapsed: 0.0292518 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 26 done. Time elapsed: 0.0265911 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 27 done. Time elapsed: 0.0251131 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 5 ################
+@@@@@@@@@@@@@@ 5
+Superstep 1 done. Time elapsed: 0.882273 seconds
+#vmsgs: 41976, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.110419 seconds
+#vmsgs: 8758, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.0650139 seconds
+#vmsgs: 2617, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0550261 seconds
+#vmsgs: 975, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.0502501 seconds
+#vmsgs: 401, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.0473139 seconds
+#vmsgs: 204, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.044821 seconds
+#vmsgs: 88, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.04264 seconds
+#vmsgs: 74, #bmsgs: 0
+Superstep 9 done. Time elapsed: 0.0412431 seconds
+#vmsgs: 78, #bmsgs: 0
+Superstep 10 done. Time elapsed: 0.0399308 seconds
+#vmsgs: 37, #bmsgs: 0
+Superstep 11 done. Time elapsed: 0.0387909 seconds
+#vmsgs: 9, #bmsgs: 0
+Superstep 12 done. Time elapsed: 0.034441 seconds
+#vmsgs: 11, #bmsgs: 0
+Superstep 13 done. Time elapsed: 0.0280349 seconds
+#vmsgs: 2, #bmsgs: 0
+Superstep 14 done. Time elapsed: 0.0251279 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 15 done. Time elapsed: 0.023653 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 6 ################
+@@@@@@@@@@@@@@ 6
+Superstep 1 done. Time elapsed: 0.814812 seconds
+#vmsgs: 21397, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0858071 seconds
+#vmsgs: 3202, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.054333 seconds
+#vmsgs: 813, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.049767 seconds
+#vmsgs: 258, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.0465009 seconds
+#vmsgs: 104, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.0437629 seconds
+#vmsgs: 44, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.040468 seconds
+#vmsgs: 14, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.033953 seconds
+#vmsgs: 7, #bmsgs: 0
+Superstep 9 done. Time elapsed: 0.0325129 seconds
+#vmsgs: 6, #bmsgs: 0
+Superstep 10 done. Time elapsed: 0.0302229 seconds
+#vmsgs: 4, #bmsgs: 0
+Superstep 11 done. Time elapsed: 0.0290329 seconds
+#vmsgs: 4, #bmsgs: 0
+Superstep 12 done. Time elapsed: 0.0284438 seconds
+#vmsgs: 3, #bmsgs: 0
+Superstep 13 done. Time elapsed: 0.0278542 seconds
+#vmsgs: 2, #bmsgs: 0
+Superstep 14 done. Time elapsed: 0.0268941 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 15 done. Time elapsed: 0.0235341 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 7 ################
+@@@@@@@@@@@@@@ 7
+Superstep 1 done. Time elapsed: 0.752514 seconds
+#vmsgs: 11359, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.071157 seconds
+#vmsgs: 1317, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.0500982 seconds
+#vmsgs: 255, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0459769 seconds
+#vmsgs: 87, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.0435719 seconds
+#vmsgs: 35, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.0382152 seconds
+#vmsgs: 15, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.033324 seconds
+#vmsgs: 2, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.0272038 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 9 done. Time elapsed: 0.0246551 seconds
+#vmsgs: 3, #bmsgs: 0
+Superstep 10 done. Time elapsed: 0.0246131 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 11 done. Time elapsed: 0.0236869 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 8 ################
+@@@@@@@@@@@@@@ 8
+Superstep 1 done. Time elapsed: 0.745773 seconds
+#vmsgs: 6593, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.062603 seconds
+#vmsgs: 587, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.047929 seconds
+#vmsgs: 82, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0434651 seconds
+#vmsgs: 26, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.0391009 seconds
+#vmsgs: 14, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.0354261 seconds
+#vmsgs: 5, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.0287402 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.024466 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 9 done. Time elapsed: 0.0250261 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 10 done. Time elapsed: 0.0261879 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 11 done. Time elapsed: 0.023545 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 9 ################
+@@@@@@@@@@@@@@ 9
+Superstep 1 done. Time elapsed: 0.725908 seconds
+#vmsgs: 3755, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0569451 seconds
+#vmsgs: 218, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.045141 seconds
+#vmsgs: 34, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0380471 seconds
+#vmsgs: 6, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.0327661 seconds
+#vmsgs: 4, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.030122 seconds
+#vmsgs: 4, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.0290251 seconds
+#vmsgs: 2, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.0269601 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 9 done. Time elapsed: 0.0262341 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 10 done. Time elapsed: 0.0251639 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 11 done. Time elapsed: 0.0249338 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 12 done. Time elapsed: 0.024951 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 13 done. Time elapsed: 0.024941 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 14 done. Time elapsed: 0.0257852 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 15 done. Time elapsed: 0.023638 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 10 ################
+@@@@@@@@@@@@@@ 10
+Superstep 1 done. Time elapsed: 0.716653 seconds
+#vmsgs: 2318, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0536449 seconds
+#vmsgs: 106, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.042927 seconds
+#vmsgs: 12, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0334909 seconds
+#vmsgs: 6, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.0303981 seconds
+#vmsgs: 6, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.0282249 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 7 done. Time elapsed: 0.0255568 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 8 done. Time elapsed: 0.024621 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 11 ################
+@@@@@@@@@@@@@@ 11
+Superstep 1 done. Time elapsed: 0.705607 seconds
+#vmsgs: 1452, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0514379 seconds
+#vmsgs: 41, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.0394151 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0281601 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.0256691 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 6 done. Time elapsed: 0.0234971 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 12 ################
+@@@@@@@@@@@@@@ 12
+Superstep 1 done. Time elapsed: 0.699076 seconds
+#vmsgs: 891, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.05 seconds
+#vmsgs: 18, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.033098 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0258539 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.0233819 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 13 ################
+@@@@@@@@@@@@@@ 13
+Superstep 1 done. Time elapsed: 0.692804 seconds
+#vmsgs: 578, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0489841 seconds
+#vmsgs: 8, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.032553 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0243452 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 5 done. Time elapsed: 0.0235679 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 14 ################
+@@@@@@@@@@@@@@ 14
+Superstep 1 done. Time elapsed: 0.699534 seconds
+#vmsgs: 372, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0508878 seconds
+#vmsgs: 5, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.026814 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 4 done. Time elapsed: 0.0235119 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 15 ################
+@@@@@@@@@@@@@@ 15
+Superstep 1 done. Time elapsed: 0.692659 seconds
+#vmsgs: 257, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.04778 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.024385 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 16 ################
+@@@@@@@@@@@@@@ 16
+Superstep 1 done. Time elapsed: 0.692326 seconds
+#vmsgs: 158, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.04689 seconds
+#vmsgs: 0, #bmsgs: 0
+Superstep 3 done. Time elapsed: 0.026324 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 17 ################
+@@@@@@@@@@@@@@ 17
+Superstep 1 done. Time elapsed: 0.698839 seconds
+#vmsgs: 101, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0467122 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 18 ################
+@@@@@@@@@@@@@@ 18
+Superstep 1 done. Time elapsed: 0.688154 seconds
+#vmsgs: 68, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.045573 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 19 ################
+@@@@@@@@@@@@@@ 19
+Superstep 1 done. Time elapsed: 0.699384 seconds
+#vmsgs: 49, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.044538 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 20 ################
+@@@@@@@@@@@@@@ 20
+Superstep 1 done. Time elapsed: 0.689947 seconds
+#vmsgs: 32, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0437529 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 21 ################
+@@@@@@@@@@@@@@ 21
+Superstep 1 done. Time elapsed: 0.686564 seconds
+#vmsgs: 22, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0422831 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 22 ################
+@@@@@@@@@@@@@@ 22
+Superstep 1 done. Time elapsed: 0.688382 seconds
+#vmsgs: 12, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0389209 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 23 ################
+@@@@@@@@@@@@@@ 23
+Superstep 1 done. Time elapsed: 0.69162 seconds
+#vmsgs: 9, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0378449 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 24 ################
+@@@@@@@@@@@@@@ 24
+Superstep 1 done. Time elapsed: 0.694649 seconds
+#vmsgs: 5, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.035161 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 25 ################
+@@@@@@@@@@@@@@ 25
+Superstep 1 done. Time elapsed: 0.687234 seconds
+#vmsgs: 3, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.034271 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 26 ################
+@@@@@@@@@@@@@@ 26
+Superstep 1 done. Time elapsed: 0.690216 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0309851 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 27 ################
+@@@@@@@@@@@@@@ 27
+Superstep 1 done. Time elapsed: 0.689325 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0309319 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 28 ################
+@@@@@@@@@@@@@@ 28
+Superstep 1 done. Time elapsed: 0.690007 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0290051 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 29 ################
+@@@@@@@@@@@@@@ 30
+Superstep 1 done. Time elapsed: 0.686671 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.027096 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 30 ################
+@@@@@@@@@@@@@@ 31
+Superstep 1 done. Time elapsed: 0.695812 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0269618 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 31 ################
+@@@@@@@@@@@@@@ 38
+Superstep 1 done. Time elapsed: 0.692861 seconds
+#vmsgs: 1, #bmsgs: 0
+Superstep 2 done. Time elapsed: 0.0259101 seconds
+#vmsgs: 0, #bmsgs: 0
+################ Phase 32 ################
+@@@@@@@@@@@@@@ 1000000000
+Superstep 1 done. Time elapsed: 0.687302 seconds
+#vmsgs: 0, #bmsgs: 0
+Communication Time : 0.003865 seconds
+- Serialization Time : 0.000308 seconds
+- Transfer Time : 0.002356 seconds
+Total Computational Time : 48.470276 seconds
+Total #msgs=8462659
+Total #bmsgs=0
+Dump Time : 1.196499 seconds

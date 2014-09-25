@@ -76,7 +76,7 @@ public:
     
     void add_phi()
     {
-        if (phis.size() == 0 || CURRENT_PI < phis.back().v2)
+        if (phis.size() == 0 || phi < phis.back().v2)
             phis.push_back(intpair(CURRENT_PI, phi)); // num_out_edges should equal to num_in_edges
         else
             phis.back().v1 = CURRENT_PI;
@@ -102,7 +102,10 @@ public:
             // for agg
                 
             degree = in_edges.size() + out_edges.size();
-            phi = degree;
+            if(phase_num() == 1)
+                phi = degree;
+            else
+                phi = min(phi, degree);
             
             if(phase_num() == 1) // initialize once
             {
@@ -161,7 +164,7 @@ int cmptripletX(const tripletX& t1, const tripletX& t2)
 class kcoretBlock : public Block<char, kcoretVertex, char>
 {
 public:
-    vector< pair<int, vector<int>* > > Bplus;
+        vector< pair<int, vector<int>* > > Bplus;
 
         void binsort(VertexContainer& vertexes)
         {
@@ -337,7 +340,13 @@ public:
                         extend[vid]->push_back(i); // i is the subscript
                     }
                 }
-
+                
+                for(int i = 0 ;i < Bplus.size(); i ++)
+                {
+                    delete Bplus[i].second;
+                }
+                
+                Bplus.clear();
                 for(hash_map<int, vector<int>* >::iterator it = extend.begin(); it != extend.end(); it ++)
                 {
                     Bplus.push_back(*it);
