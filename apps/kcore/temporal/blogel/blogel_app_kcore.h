@@ -10,11 +10,11 @@
 #include <cassert>
 #include <sstream>
 #include <list>
-
-
 using namespace std;
 const int inf = 1000000000;
 hash_map<int,int> psi;
+
+int CURRENT_K = 0;
 
 struct tripletX
 {
@@ -70,22 +70,52 @@ public:
     hash_map<int, int> p;
     
     int phi;
-        int degree;
-        bool changed;
-        bool deleted;
-        virtual void compute(MessageContainer& messages)
+    int degree;
+    bool changed;
+    bool deleted;
+    
+    void add_phi()
+    {
+        if (phis.size() == 0 || CURRENT_K < phis.back().second)
+            phis.push_back(std::make_pair(pi, CURRENT_K)); // num_out_edges should equal to num_in_edges
+        else
+            phis.back().first = pi;
+    }
+    
+    virtual void compute(MessageContainer& messages)
+    {
+        vector<tripletX>& in_edges = value().in_edges;
+        vector<tripletX>& out_edges = value().out_edges;
+        
+        if(step_num() == 1)
         {
-            vector<tripletX>& in_edges = value().in_edges;
-            vector<tripletX>& out_edges = value().out_edges;
-            if(step_num() == 1)
+            // add last round result
+            if(phase_num() > 1)
+                add_phi();
+            // clear edges
+            while(in_edges.size() && in_edges.back().vid.v2 == CURRENT_K)
+                in_edges.pop_back();
+            while(out_edges.size() && out_edges.back().vid.v2 == CURRENT_K)
+                out_edges.pop_back();
+            
+            // for agg
+                
+            degree = in_edges.size() + out_edges.size();
+            phi = degree;
+            
+            if(degree == 0)
             {
-                degree = in_edges.size() + out_edges.size();
-                phi = degree;
-                changed = false;
-                if(degree == 0)
-                {
-                    vote_to_halt();
-                }
+                vote_to_halt();
+            }
+        }
+        else if(step_num() == 2)
+        {
+            
+            changed = false;
+            CURRENT_K = *((int*)getAgg());
+            
+            if(phase_num() == 1) // initialize once
+            {
                 for(int i = 0 ;i < out_edges.size(); i ++)
                 {
                     //intpair msg(id, degree);
@@ -93,28 +123,35 @@ public:
                     psi[ out_edges[i].vid.v1 ] = inf;
                 }
             }
-            else
-            {
-                // update psi based on messages received.
-                changed = true;
-                for(int i = 0; i < messages.size(); i ++)
-                {
-                    int u = messages[i].v1;
-                    int k = messages[i].v2;
-                    if (k < psi[u])
-                    {
-                        psi[u] = k;
-                    }
-                }
-                vote_to_halt();
-            }
         }
+        else
+        {
+            // update psi based on messages received.
+            changed = true;
+            for(int i = 0; i < messages.size(); i ++)
+            {
+                int u = messages[i].v1;
+                int k = messages[i].v2;
+                if (k < psi[u])
+                {
+                    psi[u] = k;
+                }
+            }
+            vote_to_halt();
+        }
+    }
 };
 
 int cmpPsi(const pair<int, vector<int>* >& p1, const pair<int, vector<int>* >& p2) 
 {
     return psi[p1.first] < psi[p2.first];
 }
+
+int cmptripletX(const tripletX& t1, const tripletX& t2) 
+{
+    return t1.vid.v2 < t2.vid.v2;
+}
+
 
 class kcoretBlock : public Block<char, kcoretVertex, char>
 {
@@ -123,7 +160,7 @@ public:
 
         void binsort(VertexContainer& vertexes)
         {
-            if(step_num() > 1)
+            if(step_num() > 2)
                 sort(Bplus.begin(), Bplus.end(), cmpPsi);
 
             int maxDeg = 0;
@@ -277,6 +314,10 @@ public:
         {
             if(step_num() == 1)
             {
+                return;
+            }
+            else if(step_num() == 2)
+            {
                 // initialize Bplus
 
                 hash_map<int, vector<int>* > extend;
@@ -369,18 +410,19 @@ public:
 
 class kcoretAgg : public BAggregator<kcoretVertex, kcoretBlock, int, int>
 {
-private:
-
-
+    int pi;
 public:
     virtual void init()
     {
-
+        pi = inf;
     }
 
     virtual void stepPartialV(kcoretVertex* v)
     {
-
+        if(v->value().in_edges.size() != 0)
+            pi = min(pi, v->value().in_edges.back().vid.v2);
+        if(v->value().out_edges.size() != 0)
+            pi = min(pi, v->value().out_edges.back().vid.v2);
     }
 
     virtual void stepPartialB(kcoretBlock* b)
@@ -390,17 +432,17 @@ public:
 
     virtual void stepFinal(int* part)
     {
-
+        pi = min(pi, *part);
     }
 
     virtual int* finishPartial()
     {
-
+        return &pi;
     }
 
     virtual int* finishFinal()
     {
-
+        return &pi;
     }
 };
 
@@ -473,11 +515,17 @@ public:
                 out_edges.push_back(trip);
             }
         }
+        
+        sort(in_edges.begin(),in_edges.end(),cmptripletX);
+        sort(out_edges.begin(),out_edges.end(),cmptripletX);
         return v;
     }
 
     virtual void toline(kcoretBlock* b, kcoretVertex* v, BufferedWriter& writer)
     {
+        //add the result from last round
+        v->add_phi();
+    
         sprintf(buf, "%d\t", v->id);
         writer.write(buf);
         for (int i = 0; i < v->phis.size(); i++)
