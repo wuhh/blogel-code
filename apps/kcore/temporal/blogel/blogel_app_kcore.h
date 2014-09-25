@@ -14,7 +14,7 @@ using namespace std;
 const int inf = 1000000000;
 hash_map<int,int> psi;
 
-int CURRENT_K = 0;
+int CURRENT_PI = 0;
 
 struct tripletX
 {
@@ -76,10 +76,10 @@ public:
     
     void add_phi()
     {
-        if (phis.size() == 0 || CURRENT_K < phis.back().second)
-            phis.push_back(std::make_pair(pi, CURRENT_K)); // num_out_edges should equal to num_in_edges
+        if (phis.size() == 0 || CURRENT_PI < phis.back().v2)
+            phis.push_back(intpair(CURRENT_PI, phi)); // num_out_edges should equal to num_in_edges
         else
-            phis.back().first = pi;
+            phis.back().v1 = CURRENT_PI;
     }
     
     virtual void compute(MessageContainer& messages)
@@ -93,9 +93,9 @@ public:
             if(phase_num() > 1)
                 add_phi();
             // clear edges
-            while(in_edges.size() && in_edges.back().vid.v2 == CURRENT_K)
+            while(in_edges.size() && in_edges.back().vid.v2 == CURRENT_PI)
                 in_edges.pop_back();
-            while(out_edges.size() && out_edges.back().vid.v2 == CURRENT_K)
+            while(out_edges.size() && out_edges.back().vid.v2 == CURRENT_PI)
                 out_edges.pop_back();
             
             // for agg
@@ -112,7 +112,7 @@ public:
         {
             
             changed = false;
-            CURRENT_K = *((int*)getAgg());
+            CURRENT_PI = *((int*)getAgg());
             
             if(phase_num() == 1) // initialize once
             {
