@@ -114,6 +114,12 @@ public:
                 }
             }
 
+            changed = false;
+            
+            if(degree == 0)
+            {
+                vote_to_halt();
+            }
         }
         else
         {   
@@ -121,14 +127,9 @@ public:
             if(step_num() == 2)
             {
                 CURRENT_PI = *((int*)getAgg());
-                if(CURRENT_PI == inf)
-                {
-                    forceTerminate();
-                    return;
-                }
             }
-        
-            changed = false;
+            
+            changed = true;
             
             // update psi based on messages received.
             for(int i = 0; i < messages.size(); i ++)
@@ -137,7 +138,6 @@ public:
                 int k = messages[i].v2;
                 if (k < psi[u])
                 {
-                    changed = true;
                     psi[u] = k;
                 }
             }
@@ -309,11 +309,9 @@ public:
                 cd[i] += cd[i + 1];
                 if(cd[i] >= i)
                 {
-                    //cout << "@@@@" << v->id << " " << i << endl;
                     return i;
                 }
             }
-            cout << v->id << endl;
             assert(0);
         } 
         virtual void compute(MessageContainer& messages, VertexContainer& vertexes)
@@ -449,7 +447,13 @@ public:
     virtual int* finishFinal()
     {
         if(step_num() == 1)
+        {
             cout << "@@@@@@@@@@@@@@ " << pi << endl;
+            if(pi == inf)
+            {
+                forceTerminate();
+            }
+        }
         return &pi;
     }
 };
