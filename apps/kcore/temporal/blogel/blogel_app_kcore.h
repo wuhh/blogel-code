@@ -95,9 +95,9 @@ public:
             if(phase_num() > 1 && degree > 0)
                 add_phi();
             // clear edges
-            while(in_edges.size() && in_edges.back().vid.v2 == CURRENT_PI)
+            while(in_edges.size() && in_edges.back().vid.v2 <= CURRENT_PI)
                 in_edges.pop_back();
-            while(out_edges.size() && out_edges.back().vid.v2 == CURRENT_PI)
+            while(out_edges.size() && out_edges.back().vid.v2 <= CURRENT_PI)
                 out_edges.pop_back();
             // for agg
                 
@@ -107,7 +107,7 @@ public:
             else
                 phi = min(phi, degree);
             
-            if(phase_num() == 1) // initialize once
+            //if(phase_num() == 1) // initialize once /// ????? why
             {
                 for(int i = 0 ;i < out_edges.size(); i ++)
                 {
