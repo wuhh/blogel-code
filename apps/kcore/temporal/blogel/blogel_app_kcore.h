@@ -103,17 +103,11 @@ public:
             degree = in_edges.size() + out_edges.size();
             phi = degree;
             
-            if(degree == 0)
+           
+            if(id == 774551)
             {
-                vote_to_halt();
+                cout << id << " " <<   degree << endl;
             }
-        }
-        else if(step_num() == 2)
-        {
-            
-            changed = false;
-            CURRENT_PI = *((int*)getAgg());
-            
             if(phase_num() == 1) // initialize once
             {
                 for(int i = 0 ;i < out_edges.size(); i ++)
@@ -123,20 +117,34 @@ public:
                     psi[ out_edges[i].vid.v1 ] = inf;
                 }
             }
+
         }
         else
-        {
+        {   
+           
+            if(step_num() == 2)
+                CURRENT_PI = *((int*)getAgg());
+        
+            changed = false;
+            
             // update psi based on messages received.
-            changed = true;
             for(int i = 0; i < messages.size(); i ++)
             {
                 int u = messages[i].v1;
                 int k = messages[i].v2;
                 if (k < psi[u])
                 {
+                    changed = true;
                     psi[u] = k;
                 }
             }
+
+              if(id == 774551)
+            {
+                cout << id << " " <<   degree << " " << messages.size() << " " << changed<< endl;
+            }
+           
+
             vote_to_halt();
         }
     }
@@ -160,7 +168,7 @@ public:
 
         void binsort(VertexContainer& vertexes)
         {
-            if(step_num() > 2)
+            if(step_num() > 1)
                 sort(Bplus.begin(), Bplus.end(), cmpPsi);
 
             int maxDeg = 0;
@@ -308,15 +316,12 @@ public:
                     return i;
                 }
             }
+            cout << v->id << endl;
             assert(0);
         } 
         virtual void compute(MessageContainer& messages, VertexContainer& vertexes)
         {
             if(step_num() == 1)
-            {
-                return;
-            }
-            else if(step_num() == 2)
             {
                 // initialize Bplus
 
@@ -378,6 +383,12 @@ public:
                 {
                     kcoretVertex* v = vertexes[i];
                     //cout << v->id << " " << v->phi << endl;
+                    
+                    if(v->id == 774451 )
+                    {
+                        cout << v->changed << " " << v->degree << endl;
+                    }
+                    
                     if(v->changed)
                     {
                         v->changed = false;
@@ -419,10 +430,13 @@ public:
 
     virtual void stepPartialV(kcoretVertex* v)
     {
-        if(v->value().in_edges.size() != 0)
-            pi = min(pi, v->value().in_edges.back().vid.v2);
-        if(v->value().out_edges.size() != 0)
-            pi = min(pi, v->value().out_edges.back().vid.v2);
+        if(step_num() == 1)
+        {
+            if(v->value().in_edges.size() != 0)
+                pi = min(pi, v->value().in_edges.back().vid.v2);
+            if(v->value().out_edges.size() != 0)
+                pi = min(pi, v->value().out_edges.back().vid.v2);
+        }
     }
 
     virtual void stepPartialB(kcoretBlock* b)
@@ -452,7 +466,7 @@ class kcoretBlockWorker : public BWorker<kcoretBlock, kcoretAgg>
 {
     char buf[1000];
 
-public:
+    public:
     virtual void blockInit(VertexContainer& vertexes, BlockContainer& blocks)
     {
         hash_map<int, int> map;
@@ -490,10 +504,10 @@ public:
         ssin >> v->id;
         ssin >> v->bid;
         ssin >> v->wid;
-        
+
         vector<tripletX>& in_edges = v->value().in_edges;
         vector<tripletX>& out_edges = v->value().out_edges;
-        
+
         int num;
         ssin >> num;
         for (int i = 0; i < num; i++)
@@ -505,7 +519,7 @@ public:
                 int t;
                 ssin >> t;
             }
-            
+
             if(trip.bid == v->bid)
             {
                 in_edges.push_back(trip);
@@ -515,7 +529,7 @@ public:
                 out_edges.push_back(trip);
             }
         }
-        
+
         sort(in_edges.begin(),in_edges.end(),cmptripletX);
         sort(out_edges.begin(),out_edges.end(),cmptripletX);
         return v;
@@ -525,7 +539,7 @@ public:
     {
         //add the result from last round
         v->add_phi();
-    
+
         sprintf(buf, "%d\t", v->id);
         writer.write(buf);
         for (int i = 0; i < v->phis.size(); i++)
@@ -534,7 +548,7 @@ public:
             {
                 sprintf(buf, " ");
                 writer.write(buf);
-                
+
             }
             sprintf(buf, "%d %d", v->phis[i].v1, v->phis[i].v2);
             writer.write(buf);
